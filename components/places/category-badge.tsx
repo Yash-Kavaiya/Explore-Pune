@@ -1,5 +1,5 @@
 import { getCategory } from "@/lib/data/categories";
-import { getIcon } from "@/lib/icons";
+import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/utils";
 import type { CategoryId } from "@/lib/types";
 
@@ -13,7 +13,6 @@ export function CategoryBadge({
   withIcon?: boolean;
 }) {
   const cat = getCategory(category);
-  const Icon = getIcon(cat.icon);
   return (
     <span
       className={cn(
@@ -22,7 +21,7 @@ export function CategoryBadge({
       )}
     >
       {withIcon && (
-        <Icon className="size-3.5" style={{ color: `var(--chart-${cat.accent})` }} />
+        <Icon name={cat.icon} className="size-3.5" style={{ color: `var(--chart-${cat.accent})` }} />
       )}
       {cat.label}
     </span>

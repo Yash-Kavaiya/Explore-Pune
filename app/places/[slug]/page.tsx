@@ -10,6 +10,10 @@ export async function generateStaticParams() {
   return getSeedPlaces().map((p) => ({ slug: p.slug }));
 }
 
+// The page body is static, but the reviews on it are not. Without this the
+// build-time snapshot (zero reviews) would be served forever.
+export const revalidate = 60;
+
 export async function generateMetadata({
   params,
 }: {

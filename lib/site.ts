@@ -4,13 +4,28 @@
  * across metadata, the header/footer, and structured data.
  */
 
+/**
+ * Public base URL for metadata, Open Graph and the sitemap.
+ *
+ * An explicit NEXT_PUBLIC_SITE_URL always wins. Failing that we use the URLs
+ * Vercel injects, so a fresh deploy never advertises localhost: the production
+ * domain is stable across deploys, while the per-deployment URL is what gives
+ * preview builds self-consistent links.
+ */
+function resolveSiteUrl(): string {
+  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
+  const vercelHost =
+    process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL ?? process.env.NEXT_PUBLIC_VERCEL_URL;
+  return vercelHost ? `https://${vercelHost}` : "http://localhost:3000";
+}
+
 export const SITE = {
   name: "ExplorePune",
   tagline: "Discover the soul of Pune",
   description:
     "Discover Pune's famous forts, temples, gardens and hidden gems. Browse a curated, map-based directory, read rich place guides, leave reviews, and suggest new spots for the community.",
   /** Public base URL — override with NEXT_PUBLIC_SITE_URL in production. */
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  url: resolveSiteUrl(),
   locale: "en_IN",
   /** Pune city center — used as the default map focus. */
   center: { lat: 18.5204, lng: 73.8567 },

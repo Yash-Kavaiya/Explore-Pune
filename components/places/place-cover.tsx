@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { getIcon } from "@/lib/icons";
+import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/utils";
 
 type PlaceCoverProps = {
@@ -30,8 +30,6 @@ export function PlaceCover({
   priority,
   sizes = "(max-width: 768px) 100vw, 33vw",
 }: PlaceCoverProps) {
-  const Icon = getIcon(iconKey);
-
   if (src) {
     return (
       <div className={cn("relative overflow-hidden bg-muted", className)}>
@@ -61,7 +59,11 @@ export function PlaceCover({
       {/* sheen */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-white/10" />
       {watermark && (
-        <Icon className="absolute -bottom-4 -right-3 size-28 text-white/15" strokeWidth={1.25} />
+        <Icon
+          name={iconKey}
+          className="absolute -bottom-4 -right-3 size-28 text-white/15"
+          strokeWidth={1.25}
+        />
       )}
     </div>
   );
