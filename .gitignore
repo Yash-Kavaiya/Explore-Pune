@@ -49,4 +49,6 @@ next-env.d.ts
 # playwright / dev artifacts
 .playwright-mcp/
 *.png
+!docs/screenshots/
+!docs/screenshots/*.png
 dev-server.log
