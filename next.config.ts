@@ -8,9 +8,11 @@ const nextConfig: NextConfig = {
     root: path.resolve(),
   },
   images: {
-    // Uploaded community photos live in /public/uploads (same-origin, no config
-    // needed). These patterns simply allow swapping in real remote photos later.
+    // Locally, uploaded community photos live in /public/uploads (same-origin,
+    // no config needed). On Vercel they are served from a Blob store, hence the
+    // wildcard below. The rest allow swapping in real remote photos later.
     remotePatterns: [
+      { protocol: "https", hostname: "*.public.blob.vercel-storage.com" },
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "picsum.photos" },
     ],

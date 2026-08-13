@@ -1,0 +1,7 @@
+# Vercel already honours .gitignore for Git deployments. This trims the rest of
+# what the running site never needs, keeping the build context small.
+.github/
+docs/
+AGENTS.md
+CLAUDE.md
+DEPLOYMENT.md

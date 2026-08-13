@@ -384,8 +384,6 @@ const PALETTES: Record<TimeOfDay, Palette> = {
 
 type Anchor = { target: THREE.Vector3; dir: THREE.Vector3; distance: number };
 
-const ROOF_Y = PLINTH + STOREY * 2 + PARAPET;
-
 function buildAnchors(): Record<FeatureId, Anchor> {
   const raw = getPalaceAnchors();
   const out = {} as Record<FeatureId, Anchor>;
