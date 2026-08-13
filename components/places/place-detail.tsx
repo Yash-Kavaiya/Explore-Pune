@@ -70,6 +70,42 @@ import {
   OshoFaqs,
   OshoStory,
 } from "@/components/places/osho/osho-story";
+import { HillExperience } from "@/components/places/vetal/hill-experience";
+import {
+  HillEtiquette,
+  HillFaqs,
+  HillStory,
+} from "@/components/places/vetal/hill-story";
+import { CaveExperience } from "@/components/places/pataleshwar/cave-experience";
+import {
+  CaveEtiquette,
+  CaveFaqs,
+  CaveStory,
+} from "@/components/places/pataleshwar/cave-story";
+import { MemorialExperience } from "@/components/places/memorial/memorial-experience";
+import {
+  MemorialEtiquette,
+  MemorialFaqs,
+  MemorialStory,
+} from "@/components/places/memorial/memorial-story";
+import { DamExperience } from "@/components/places/dam/dam-experience";
+import {
+  DamEtiquette,
+  DamFaqs,
+  DamStory,
+} from "@/components/places/dam/dam-story";
+import { BaugExperience } from "@/components/places/saras/baug-experience";
+import {
+  BaugEtiquette,
+  BaugFaqs,
+  BaugStory,
+} from "@/components/places/saras/baug-story";
+import { EmpressExperience } from "@/components/places/empress/empress-experience";
+import {
+  EmpressEtiquette,
+  EmpressFaqs,
+  EmpressStory,
+} from "@/components/places/empress/empress-story";
 import { GARDEN_FAQS } from "@/lib/data/okayama-garden";
 import { FORT_FAQS } from "@/lib/data/shaniwar-wada";
 import { TEMPLE_FAQS } from "@/lib/data/dagdusheth-temple";
@@ -79,6 +115,12 @@ import { SINHAGAD_FAQS } from "@/lib/data/sinhagad-fort";
 import { LAL_MAHAL_FAQS } from "@/lib/data/lal-mahal";
 import { PARVATI_FAQS } from "@/lib/data/parvati-hill-temple";
 import { OSHO_FAQS } from "@/lib/data/osho-resort";
+import { HILL_FAQS } from "@/lib/data/vetal-tekdi";
+import { CAVE_FAQS } from "@/lib/data/pataleshwar-cave";
+import { MEMORIAL_FAQS } from "@/lib/data/national-war-memorial";
+import { DAM_FAQS } from "@/lib/data/khadakwasla-dam";
+import { BAUG_FAQS } from "@/lib/data/saras-baug";
+import { EMPRESS_FAQS } from "@/lib/data/empress-garden";
 import { PlaceLocationMap } from "@/components/map/place-location-map";
 import { SITE } from "@/lib/site";
 import { Badge } from "@/components/ui/badge";
@@ -101,6 +143,12 @@ const SINHAGAD_SLUG = "sinhagad-fort";
 const LAL_MAHAL_SLUG = "lal-mahal";
 const PARVATI_SLUG = "parvati-hill-temple";
 const OSHO_SLUG = "osho-meditation-resort";
+const VETAL_SLUG = "vetal-tekdi";
+const CAVE_SLUG = "pataleshwar-cave-temple";
+const MEMORIAL_SLUG = "national-war-memorial";
+const DAM_SLUG = "khadakwasla-dam";
+const SARAS_SLUG = "saras-baug";
+const EMPRESS_SLUG = "empress-garden";
 
 export function PlaceDetail({
   place,
@@ -125,6 +173,12 @@ export function PlaceDetail({
   const isLalMahal = place.slug === LAL_MAHAL_SLUG;
   const isParvati = place.slug === PARVATI_SLUG;
   const isOsho = place.slug === OSHO_SLUG;
+  const isVetal = place.slug === VETAL_SLUG;
+  const isCave = place.slug === CAVE_SLUG;
+  const isMemorial = place.slug === MEMORIAL_SLUG;
+  const isDam = place.slug === DAM_SLUG;
+  const isSaras = place.slug === SARAS_SLUG;
+  const isEmpress = place.slug === EMPRESS_SLUG;
   const has3d =
     isGarden ||
     isFort ||
@@ -134,7 +188,13 @@ export function PlaceDetail({
     isSinhagad ||
     isLalMahal ||
     isParvati ||
-    isOsho;
+    isOsho ||
+    isVetal ||
+    isCave ||
+    isMemorial ||
+    isDam ||
+    isSaras ||
+    isEmpress;
 
   return (
     <article>
@@ -231,6 +291,66 @@ export function PlaceDetail({
         />
       )}
 
+      {isVetal && (
+        <HillExperience
+          name={place.name}
+          area={place.area}
+          rating={displayRating}
+          reviewCount={summary.count > 0 ? summary.count : undefined}
+          tagline={place.shortDescription}
+        />
+      )}
+
+      {isCave && (
+        <CaveExperience
+          name={place.name}
+          area={place.area}
+          rating={displayRating}
+          reviewCount={summary.count > 0 ? summary.count : undefined}
+          tagline={place.shortDescription}
+        />
+      )}
+
+      {isMemorial && (
+        <MemorialExperience
+          name={place.name}
+          area={place.area}
+          rating={displayRating}
+          reviewCount={summary.count > 0 ? summary.count : undefined}
+          tagline={place.shortDescription}
+        />
+      )}
+
+      {isDam && (
+        <DamExperience
+          name={place.name}
+          area={place.area}
+          rating={displayRating}
+          reviewCount={summary.count > 0 ? summary.count : undefined}
+          tagline={place.shortDescription}
+        />
+      )}
+
+      {isSaras && (
+        <BaugExperience
+          name={place.name}
+          area={place.area}
+          rating={displayRating}
+          reviewCount={summary.count > 0 ? summary.count : undefined}
+          tagline={place.shortDescription}
+        />
+      )}
+
+      {isEmpress && (
+        <EmpressExperience
+          name={place.name}
+          area={place.area}
+          rating={displayRating}
+          reviewCount={summary.count > 0 ? summary.count : undefined}
+          tagline={place.shortDescription}
+        />
+      )}
+
       {/* Breadcrumb */}
       <nav
         aria-label="Breadcrumb"
@@ -303,6 +423,12 @@ export function PlaceDetail({
       {isLalMahal && <MahalStory />}
       {isParvati && <ParvatiStory />}
       {isOsho && <OshoStory />}
+      {isVetal && <HillStory />}
+      {isCave && <CaveStory />}
+      {isMemorial && <MemorialStory />}
+      {isDam && <DamStory />}
+      {isSaras && <BaugStory />}
+      {isEmpress && <EmpressStory />}
 
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-10 sm:px-6 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-12 lg:py-12">
         {/* Main column */}
@@ -370,6 +496,12 @@ export function PlaceDetail({
           {isLalMahal && <MahalEtiquette />}
           {isParvati && <ParvatiEtiquette />}
           {isOsho && <OshoEtiquette />}
+          {isVetal && <HillEtiquette />}
+          {isCave && <CaveEtiquette />}
+          {isMemorial && <MemorialEtiquette />}
+          {isDam && <DamEtiquette />}
+          {isSaras && <BaugEtiquette />}
+          {isEmpress && <EmpressEtiquette />}
 
           <section aria-labelledby="map-heading" className="space-y-4">
             <h2 id="map-heading" className="font-heading text-2xl font-semibold">
@@ -408,6 +540,12 @@ export function PlaceDetail({
           {isLalMahal && <MahalFaqs />}
           {isParvati && <ParvatiFaqs />}
           {isOsho && <OshoFaqs />}
+          {isVetal && <HillFaqs />}
+          {isCave && <CaveFaqs />}
+          {isMemorial && <MemorialFaqs />}
+          {isDam && <DamFaqs />}
+          {isSaras && <BaugFaqs />}
+          {isEmpress && <EmpressFaqs />}
 
           <ReviewSection
             placeSlug={place.slug}
@@ -481,6 +619,12 @@ function faqsFor(slug: string): { q: string; a: string }[] | undefined {
   if (slug === LAL_MAHAL_SLUG) return LAL_MAHAL_FAQS;
   if (slug === PARVATI_SLUG) return PARVATI_FAQS;
   if (slug === OSHO_SLUG) return OSHO_FAQS;
+  if (slug === VETAL_SLUG) return HILL_FAQS;
+  if (slug === CAVE_SLUG) return CAVE_FAQS;
+  if (slug === MEMORIAL_SLUG) return MEMORIAL_FAQS;
+  if (slug === DAM_SLUG) return DAM_FAQS;
+  if (slug === SARAS_SLUG) return BAUG_FAQS;
+  if (slug === EMPRESS_SLUG) return EMPRESS_FAQS;
   return undefined;
 }
 

@@ -20,6 +20,9 @@ import {
   Music,
   DoorOpen,
   Shield,
+  Flame,
+  Plane,
+  Ship,
   type LucideIcon,
 } from "lucide-react";
 
@@ -49,6 +52,9 @@ export const ICONS: Record<string, LucideIcon> = {
   music: Music,
   "door-open": DoorOpen,
   shield: Shield,
+  flame: Flame,
+  plane: Plane,
+  ship: Ship,
 };
 
 export function getIcon(key: string): LucideIcon {
