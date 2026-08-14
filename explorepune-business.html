@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ExplorePune — Business Presentation</title>
+<style>
+  :root {
+    --primary: #1a3c58;
+    --accent: #c45a3a;
+    --bg: #faf8f5;
+    --card: #ffffff;
+    --text: #1a1a2e;
+    --muted: #5a5a7a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .slide {
+    min-height: 100vh;
+    padding: 48px 64px;
+    display: flex;
+    flex-direction: column;
+    page-break-after: always;
+    border-bottom: 3px solid var(--accent);
+  }
+  .slide:last-child { page-break-after: auto; }
+  .slide-number {
+    position: fixed;
+    bottom: 16px;
+    right: 32px;
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  h1 { font-size: 2.4rem; font-weight: 800; color: var(--primary); margin-bottom: 8px; }
+  h2 { font-size: 1.6rem; font-weight: 700; color: var(--primary); margin-bottom: 16px; }
+  h3 { font-size: 1.2rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; margin-top: 16px; }
+  p { margin-bottom: 12px; color: var(--text); }
+  ul { margin-left: 20px; margin-bottom: 16px; }
+  li { margin-bottom: 6px; }
+  .tag {
+    display: inline-block;
+    background: var(--primary);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    margin: 2px 4px 2px 0;
+    font-weight: 600;
+  }
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 16px;
+  }
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .stat {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .stat .number {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent);
+    display: block;
+  }
+  .stat .label {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .card {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border-left: 4px solid var(--accent);
+  }
+  .cover {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 100vh;
+  }
+  .cover-left { max-width: 600px; }
+  .cover-right {
+    font-size: 6rem;
+    color: var(--primary);
+    opacity: 0.15;
+    font-weight: 900;
+  }
+  .highlight {
+    background: linear-gradient(135deg, #fff3e6 0%, #fff3e6 100%);
+    border-left: 4px solid var(--accent);
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin: 16px 0;
+    font-weight: 500;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+  th {
+    background: var(--primary);
+    color: #fff;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+  }
+  td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #e5e5e5;
+  }
+  tr:nth-child(even) td { background: #f7f7f7; }
+  .footer-note {
+    margin-top: auto;
+    padding-top: 24px;
+    font-size: 12px;
+    color: var(--muted);
+    border-top: 1px solid #ddd;
+  }
+</style>
+</head>
+<body>
+
+<!-- SLIDE 1: Cover -->
+<div class="slide cover">
+  <div class="cover-left">
+    <span class="tag">Product Launch Overview</span>
+    <h1>ExplorePune</h1>
+    <p style="font-size: 1.3rem; color: var(--muted); margin-top: 8px;">A curated digital guide to Pune — bringing forts, temples, gardens and hidden heritage sites to life through interactive 3D experiences.</p>
+    <p style="margin-top: 24px; color: var(--muted);">Presented by Yash Kavaiya<br> explorepune.vercel.app</p>
+  </div>
+  <div class="cover-right">EP</div>
+</div>
+<div class="slide-number" style="display:none;"></div>
+
+<!-- SLIDE 2: The Problem -->
+<div class="slide">
+  <h2>The Problem We Solved</h2>
+  <p>Pune is one of India's most culturally rich cities — yet discovering its heritage sites remains surprisingly difficult.</p>
+
+  <div class="two-col">
+    <div class="card">
+      <h3>What travelers face today</h3>
+      <ul>
+        <li><strong>Scattered information</strong> — no single source brings forts, temples, museums and gardens together</li>
+        <li><strong>Static images only</strong> — photos don't convey scale, layout, or atmosphere</li>
+        <li><strong>No visual preview</strong> — visitors can't "walk through" a place before committing time and effort</li>
+        <li><strong>Frustrating planning</strong> — finding opening hours, entry fees, best visiting seasons requires jumping across blogs and forums</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>What locals miss</h3>
+      <ul>
+        <li><strong>Hidden gems</strong> like Pataleshwar Cave Temple or Khadakwasla Dam's radial sluices are underserved by mainstream content</li>
+        <li><strong>Seasonal context</strong> — the difference between Empress Garden on a Tuesday vs. during the January flower show is enormous, but never visualised</li>
+        <li><strong>No community layer</strong> — no easy way to suggest a place or read real visitor experiences</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="highlight">
+    ExplorePune turns Pune's heritage into a visual, interactive, curated destination — on the web, for free, in one place.
+  </div>
+</div>
+
+<!-- SLIDE 3: What Is ExplorePune -->
+<div class="slide">
+  <h2>What Is ExplorePune?</h2>
+  <p>A web-based city guide that combines editorial depth with hand-built 3D experiences for every place it covers.</p>
+
+  <div class="stat-grid">
+    <div class="stat">
+      <span class="number">15</span>
+      <span class="label">Interactive 3D places</span>
+    </div>
+    <div class="stat">
+      <span class="number">6</span>
+      <span class="label">Categories</span>
+    </div>
+    <div class="stat">
+      <span class="number">3</span>
+      <span class="label">View modes (grid, list, map)</span>
+    </div>
+    <div class="stat">
+      <span class="number">100%</span>
+      <span class="label">Free & open to the public</span>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <h3>What makes it different</h3>
+      <ul>
+        <li><strong>Procedural 3D dioramas</strong> — every place is a hand-built three.js scene, generated at runtime. Zero imported GLB files.</li>
+        <li><strong>Hotspot navigation</strong> — tap numbered stops to fly the camera and read the story behind each landmark.</li>
+        <li><strong>Time-of-day & season modes</strong> — switch between dawn, golden hour, and dusk. Toggle festival mode where it matters.</li>
+        <li><strong>Marathi + English</strong> — feature names are bilingual, grounded in local language.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Covered categories</h3>
+      <ul>
+        <li><span class="tag">Forts &amp; Palaces</span> Shaniwar Wada, Lal Mahal, Sinhagad Fort, Aga Khan Palace</li>
+        <li><span class="tag">Museums &amp; Memorials</span> Raja Dinkar Kelkar Museum, National War Memorial</li>
+        <li><span class="tag">Temples &amp; Spiritual</span> Dagdusheth Halwai Ganapati, Pataleshwar Cave, Parvati Hill, Osho Resort</li>
+        <li><span class="tag">Nature &amp; Gardens</span> Okayama Garden, Saras Baug, Empress Garden</li>
+        <li><span class="tag">Lakes &amp; Hills</span> Vetal Tekdi, Khadakwasla Dam</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 4: User Journey -->
+<div class="slide">
+  <h2>How a Visitor Uses ExplorePune</h2>
+  <p>The experience is designed to move a user from discovery to decision in under a minute.</p>
+
+  <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;">
+    <div class="card">
+      <h3>1. Discover</h3>
+      <p>Land on the homepage. Browse category tiles (Forts, Temples, Gardens, Museums, Lakes &amp; Hills). See featured places ranked by rating. Scroll through curated collections.</p>
+    </div>
+    <div class="card">
+      <h3>2. Filter &amp; Search</h3>
+      <p>On the Places page, filter by category, area, audience type, season, or free/paid entry. Switch between grid, list, and Google Maps views. Search by keyword.</p>
+    </div>
+    <div class="card">
+      <h3>3. Explore in 3D</h3>
+      <p>Open any place. Drag to orbit the 3D scene. Scroll to zoom. Tap a numbered hotspot — the camera flies there, and the editorial story loads: history, architecture, what to see, etiquette, FAQs.</p>
+    </div>
+    <div class="card">
+      <h3>4. Plan the Visit</h3>
+      <p>Every place guide includes: how to reach it, visitor tips, nearby places, and practical essentials. Users leave reviews (stored locally for the demo) and suggest missing places through a community form.</p>
+    </div>
+  </div>
+
+  <div class="highlight">
+    Every 3D page keeps WebGL out of the server render — using <code>next/dynamic</code> with <code>ssr: false</code> — so the first paint is fast and the canvas only loads client-side.
+  </div>
+</div>
+
+<!-- SLIDE 5: Business Value -->
+<div class="slide">
+  <h2>Business Value &amp; Opportunity</h2>
+
+  <div class="two-col">
+    <div>
+      <h3>Why this matters</h3>
+      <ul>
+        <li><strong>Tourism &amp; cultural promotion</strong> — a free, accessible tool that promotes Pune's heritage to both domestic and international visitors.</li>
+        <li><strong>Differentiation</strong> — no other Pune guide offers procedural 3D walkthroughs. This is a moat, not a feature.</li>
+        <li><strong>Community engagement</strong> — the "Suggest a place" form and review system create a feedback loop; the admin dashboard lets moderators approve submissions.</li>
+        <li><strong>Educational value</strong> — schools, colleges, and heritage walks can use these dioramas as visual aids.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Revenue-adjacent hooks</h3>
+      <ul>
+        <li><strong>UPI tip jar</strong> — an in-site UPI handle (<code>explorepune@ybl</code>) for voluntary sponsorship.</li>
+        <li><strong>Sponsored listings</strong> — paid placement for heritage-tour operators, local guides, and nearby hotels could sit naturally alongside editorial content.</li>
+        <li><strong>Partnerships</strong> — tie-ins with Vercel Blob for photo uploads, Google Maps for location context, and Upstash Redis for persistent data.</li>
+        <li><strong>Scalable content</strong> — adding a new place means writing one data file and one procedural 3D world — no mesh pipeline, no artist dependency.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat">
+      <span class="number">Zero</span>
+      <span class="label">Imported 3D assets — fully procedural</span>
+    </div>
+    <div class="stat">
+      <span class="number">~1–2 days</span>
+      <span class="label">Estimated time to add a new place</span>
+    </div>
+    <div class="stat">
+      <span class="number">15</span>
+      <span class="label">Places shipped at launch</span>
+    </div>
+    <div class="stat">
+      <span class="number">₹0</span>
+      <span class="label">Entry cost for end users</span>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 6: Technical Stack Overview -->
+<div class="slide">
+  <h2>Under the Hood: The Stack</h2>
+  <p>Built on modern, production-grade tooling with a focus on performance, maintainability, and deployability.</p>
+
+  <table>
+    <tr><th>Layer</th><th>Technology</th><th>Why</th></tr>
+    <tr><td>Framework</td><td>Next.js 16 (App Router) + React 19</td><td>Server-rendered shell, client-side 3D islands. TypeScript-first.</td></tr>
+    <tr><td>3D Engine</td><td>three.js 0.180</td><td>Procedural geometry, instanced meshes, custom shaders for sky/lighting.</td></tr>
+    <tr><td>Styling</td><td>Tailwind CSS 4 + Base UI</td><td>Utility-first design system. Accessible components from Base UI.</td></tr>
+    <tr><td>Icons</td><td>Lucide React</td><td>Consistent, lightweight icon set across the UI.</td></tr>
+    <tr><td>Maps</td><td>@vis.gl/react-google-maps</td><td>Map view in the directory; Pune centre at 18.5204°N, 73.8567°E.</td></tr>
+    <tr><td>Forms</td><td>react-hook-form + Zod + @hookform/resolvers</td><td>Type-safe form validation for community requests and reviews.</td></tr>
+    <tr><td>State / Data</td><td>Upstash Redis (Vercel) or local JSON file</td><td>Dual-driver database: Redis for production, file-based for dev/self-hosting.</td></tr>
+    <tr><td>File Uploads</td><td>@vercel/blob or local /public/uploads</td><td>Community photo uploads — cloud when token set, local fallback otherwise.</td></tr>
+    <tr><td>Testing</td><td>Vitest</td><td>Layout helpers, camera anchors, and prop specs tested without a canvas.</td></tr>
+    <tr><td>Deployment</td><td>Vercel</td><td>One-click deploy; preview URLs per commit; production at explorepune.vercel.app.</td></tr>
+  </table>
+</div>
+
+<!-- SLIDE 7: The 3D Approach -->
+<div class="slide">
+  <h2>Our 3D Strategy: Why Procedural?</h2>
+  <p>This is the single most important technical decision in ExplorePune — and the one with the biggest business implications.</p>
+
+  <div class="two-col">
+    <div class="card">
+      <h3>The conventional approach</h3>
+      <ul>
+        <li>Model every place in Blender → export GLB → load with <code>useGLTF</code></li>
+        <li><strong>Cost:</strong> an artist per place, days of work each</li>
+        <li><strong>Size:</strong> each GLB adds 50 KB–2 MB to the bundle</li>
+        <li><strong>Iterate:</strong> changing a wall colour means re-exporting from a 3D tool</li>
+        <li><strong>Scale:</strong> 15 places = significant Art/3D budget</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>ExplorePune's approach</h3>
+      <ul>
+        <li>Write pure TypeScript: geometry primitives, instanced meshes, procedural layout, custom materials</li>
+        <li><strong>Cost:</strong> one developer, no art pipeline</li>
+        <li><strong>Size:</strong> zero external 3D assets — everything generated at runtime from code</li>
+        <li><strong>Iterate:</strong> adjust a tree count or rose-ring radius by editing a number in a helper</li>
+        <li><strong>Testable:</strong> layout helpers and camera anchors are pure functions — tested with Vitest, no WebGL needed</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat">
+      <span class="number">36</span>
+      <span class="label">Trees in Empress Garden (procedural)</span>
+    </div>
+    <div class="stat">
+      <span class="number">42</span>
+      <span class="label">Rose bushes across 3 concentric rings</span>
+    </div>
+    <div class="stat">
+      <span class="number">6</span>
+      <span class="label">Flower-show tents, toggleable by mode</span>
+    </div>
+    <div class="stat">
+      <span class="number">3</span>
+      <span class="label">Time-of-day palettes (dawn, golden, dusk)</span>
+    </div>
+  </div>
+
+  <div class="highlight">
+    Example: Empress Garden's <code>buildEmpressLayout(seed = 1892)</code> generates 36 old-growth trees, 42 rose bushes, a greenhouse, benches, lamps, and 6 flower-show tents — all from deterministic seeded random placement. Change the seed, change the layout. No artist involved.
+  </div>
+</div>
+
+<!-- SLIDE 8: Place Detail Architecture -->
+<div class="slide">
+  <h2>Inside a Place Page</h2>
+  <p>Every place follows the same component architecture — consistent UX, isolated implementation per site.</p>
+
+  <div class="two-col">
+    <div>
+      <h3>Component breakdown</h3>
+      <ul>
+        <li><strong><code>place-cover.tsx</code></strong> — hero image area, category badge, key metadata</li>
+        <li><strong><code>place-detail.tsx</code></strong> — the shell that composes the story, 3D experience, and practical info</li>
+        <li><strong><code>*-story.tsx</code></strong> — the editorial content: headings + body paragraphs (e.g. <code>empress-story.tsx</code>)</li>
+        <li><strong><code>*-world.ts</code></strong> — the procedural 3D world: layout, anchors, palette, <code>create*-World()</code> factory (e.g. <code>empress-world.ts</code>, 1032 lines for Empress alone)</li>
+        <li><strong><code>*-experience.tsx</code></strong> — the React bridge: <code>next/dynamic</code> import, canvas container, controls, mode switches</li>
+        <li><strong><code>*-scene.tsx</code></strong> — scene-level setup that calls into the world module</li>
+      </ul>
+    </div>
+    <div>
+      <h3>What's in the data file</h3>
+      <ul>
+        <li><strong>Features</strong> — each hotspot id, title, Marathi name, icon, blurb, and full detail paragraph (e.g. EMPRESS_FEATURES has 5 features)</li>
+        <li><strong>Stats</strong> — labelled facts (39 acres, since 1892, January show)</li>
+        <li><strong>Story</strong> — 2–3 narrative sections with headings</li>
+        <li><strong>Etiquette</strong> — visitor do's and don'ts</li>
+        <li><strong>FAQs</strong> — 4–5 questions with grounded answers</li>
+      </ul>
+      <p style="margin-top: 12px;">The feature ids in the data file double as hotspot ids in the 3D scene — one source of truth.</p>
+    </div>
+  </div>
+
+  <div class="highlight">
+    <strong>Design principle:</strong> each place owns its own folder under <code>components/places/</code> — <code>empress/</code>, <code>saras/</code>, <code>dam/</code>, <code>memorial/</code>, etc. No shared 3D code between places except the core diorama helpers in <code>components/places/three/diorama-core.ts</code>.
+  </div>
+</div>
+
+<!-- SLIDE 9: Database & Infrastructure -->
+<div class="slide">
+  <h2>Data Layer &amp; Infrastructure</h2>
+
+  <div class="two-col">
+    <div>
+      <h3>Database abstraction (<code>lib/store/db.ts</code>)</h3>
+      <p>A tiny JSON document store that exposes <code>requests</code>, <code>reviews</code>, and <code>views</code>. Two drivers, chosen at runtime:</p>
+      <ul>
+        <li><strong>Redis driver</strong> — when <code>KV_REST_API_URL</code> + token are present (Vercel deployment). Uses Upstash Redis REST API. Key: <code>explorepune:db</code>.</li>
+        <li><strong>File driver</strong> — on-disk <code>data/db.json</code>. Atomic writes via write-then-rename to prevent corruption on crash.</li>
+        <li><strong>Unconfigured driver</strong> — Vercel-only fallback: reads return empty, writes throw a clear error pointing to DEPLOYMENT.md.</li>
+      </ul>
+      <p>Write operations are serialised through a promise queue to avoid interleaving within one process.</p>
+    </div>
+    <div>
+      <h3>File upload API (<code>app/api/uploads/route.ts</code>)</h3>
+      <ul>
+        <li>Multipart form, field name <code>files</code></li>
+        <li>Up to 6 photos per request, 4 MB each</li>
+        <li>Accepted types: JPG, PNG, WEBP, GIF</li>
+        <li>Cloud path: <code>@vercel/blob</code> with <code>BLOB_READ_WRITE_TOKEN</code> → public URLs</li>
+        <li>Local path: <code>/public/uploads/</code> for <code>next dev</code> and self-hosting</li>
+        <li>Deploys cleanly on Vercel; falls back to local disk in dev</li>
+      </ul>
+      <h3>Environment-driven config</h3>
+      <p><code>NEXT_PUBLIC_SITE_URL</code> overrides the base URL for metadata. Falling back to Vercel-injected <code>NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL</code> ensures preview deploys never advertise localhost.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 10: Deployment & DevOps -->
+<div class="slide">
+  <h2>Deployment &amp; Operations</h2>
+
+  <div class="two-col">
+    <div>
+      <h3>How it's deployed</h3>
+      <ul>
+        <li><strong>Platform:</strong> Vercel — zero-config Next.js deployment, auto SSL, global edge network</li>
+        <li><strong>Production URL:</strong> <code>https://explorepune.vercel.app</code></li>
+        <li><strong>Preview deployments:</strong> every push to a branch gets a unique URL, powered by Vercel's per-deployment <code>NEXT_PUBLIC_VERCEL_URL</code></li>
+        <li><strong>Region:</strong> Vercel's default — closest edge to Pune visitors is typically Mumbai or Singapore</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Dev experience</h3>
+      <ul>
+        <li><code>npm install</code> → <code>npm run dev</code> — starts on port 3000 (or 3001 if taken)</li>
+        <li><code>npm run typecheck</code> — strict TypeScript check</li>
+        <li><code>npm test</code> — Vitest run, tests layout/anchor helpers</li>
+        <li><code>npm run build</code> — full production build, including 3D worlds as client bundles</li>
+        <li><code>npm run lint</code> — ESLint with Next.js config</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat">
+      <span class="number">Next.js 16</span>
+      <span class="label">App Router, React 19</span>
+    </div>
+    <div class="stat">
+      <span class="number">SSR: false</span>
+      <span class="label">on all 3D pages (WebGL client-only)</span>
+    </div>
+    <div class="stat">
+      <span class="number">Tailwind 4</span>
+      <span class="label">with @tailwindcss/postcss</span>
+    </div>
+    <div class="stat">
+      <span class="number">TypeScript strict</span>
+      <span class="label">mode throughout</span>
+    </div>
+  </div>
+
+  <div class="highlight">
+    <strong>Cost profile:</strong> static/SSR pages on Vercel's free tier; 3D scenes are client-side JS bundles (no server GPU). Upstash Redis has a free tier sufficient for this traffic level. Vercel Blob is priced per GB stored — community uploads are small (4 MB cap per photo).
+  </div>
+</div>
+
+<!-- SLIDE 11: Competitive Landscape -->
+<div class="slide">
+  <h2>Where ExplorePune Fits in the Market</h2>
+
+  <table>
+    <tr><th>Category</th><th>Traditional blogs / travel sites</th><th>Google Maps / Wanderlust apps</th><th>ExplorePune</th></tr>
+    <tr>
+      <td>Visual preview</td>
+      <td>Static photos, if any</td>
+      <td>Street view (not interior/heritage)</td>
+      <td><strong>Procedural 3D dioramas — drag, orbit, zoom, fly to hotspots</strong></td>
+    </tr>
+    <tr>
+      <td>Depth of content</td>
+      <td>Inconsistent, often shallow</td>
+      <td>User-generated, uneven quality</td>
+      <td><strong>Curated editorial: history, architecture, etiquette, FAQs, Marathi names</strong></td>
+    </tr>
+    <tr>
+      <td>Coverage of Pune</td>
+      <td>Scattered across many sites</td>
+      <td>Everything, but unfiltered</td>
+      <td><strong>15 hand-picked heritage places, each with a dedicated 3D world</strong></td>
+    </tr>
+    <tr>
+      <td>Seasonality</td>
+      <td>Rarely addressed</td>
+      <td>Not addressed</td>
+      <td><strong>Show-week toggle for Empress Garden; time-of-day palettes across all scenes</strong></td>
+    </tr>
+    <tr>
+      <td>Community layer</td>
+      <td>Comments section (if any)</td>
+      <td>Reviews (generic)</td>
+      <td><strong>Suggest-a-place form + review system + admin moderation dashboard</strong></td>
+    </tr>
+    <tr>
+      <td>Cost to user</td>
+      <td>Often ad-heavy or paywalled</td>
+      <td>Free</td>
+      <td><strong>Free — UPI tip jar optional</strong></td>
+    </tr>
+  </table>
+
+  <div class="highlight">
+    ExplorePune's moat is <strong>depth × visual fidelity × curation</strong> — a combination no existing Pune resource offers. The procedural 3D approach means that moat is cheap to extend.
+  </div>
+</div>
+
+<!-- SLIDE 12: Roadmap & Growth -->
+<div class="slide">
+  <h2>Roadmap &amp; Expansion Path</h2>
+
+  <div class="two-col">
+    <div>
+      <h3>Immediate (next 1–3 months)</h3>
+      <ul>
+        <li>Ship the remaining 15 places to their full 3D treatment — each is scaffolded, several are already visually rich</li>
+        <li>Add real Upstash Redis on the Vercel project so reviews and suggestions persist across deploys</li>
+        <li>Populate the directory with real community-submitted photos via the upload API</li>
+        <li>Add a "Plan your visit" collection: combine 2–3 nearby places into a walking route (e.g. Paranjape Digambar, Shaniwar Wada, Lal Mahal)</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Medium term (3–12 months)</h3>
+      <ul>
+        <li><strong>Monetisation experiments:</strong> sponsored listings for heritage tour operators; affiliate links for nearby hotels and transport</li>
+        <li><strong>Mobile-first redesign:</strong> 3D scenes already work on mobile (touch orbit, scroll zoom); polish the UI for small screens</li>
+        <li><strong>Audio guides:</strong> integrate Sarvam TTS for Marathi/English audio tours that play as the camera flies between hotspots</li>
+        <li><strong>Marathi-language version:</strong> the data layer already has Marathi feature names — extend to full page content</li>
+        <li><strong>User accounts:</strong> persistent reviews, saved places, contribution history</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat">
+      <span class="number">15 → 50+</span>
+      <span class="label">Places target over time</span>
+    </div>
+    <div class="stat">
+      <span class="number">Pune</span>
+      <span class="label">Phase 1; other cities are structurally possible</span>
+    </div>
+    <div class="stat">
+      <span class="number">School / college</span>
+      <span class="label">Potential institutional use</span>
+    </div>
+    <div class="stat">
+      <span class="number">Heritage walks</span>
+      <span class="label">Natural partner channel</span>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 13: Team & Author -->
+<div class="slide">
+  <h2>Built By</h2>
+  <div class="card" style="border-left-color: var(--primary); max-width: 500px;">
+    <h3>Yash Kavaiya</h3>
+    <p>AI/ML engineer building in the intersection of web, 3D, and voice — with a focus on Indian heritage and language.</p>
+    <p style="margin-top: 12px;"><strong>GitHub:</strong> <a href="https://github.com/Yash-Kavaiya">github.com/Yash-Kavaiya</a><br>
+    <strong>Project repo:</strong> <a href="https://github.com/Yash-Kavaiya/Explore-Pune">github.com/Yash-Kavaiya/Explore-Pune</a></p>
+  </div>
+
+  <div style="margin-top: 24px;">
+    <h3>What's in the repo today</h3>
+    <ul>
+      <li><strong>15 fully scaffolded places</strong> — each with story, etiquette, FAQs, and a procedural 3D world module</li>
+      <li><strong>Several places already visually rich</strong> — Empress Garden (1032-line world), Khadakwasla Dam, National War Memorial, Saras Baug, Pataleshwar Cave</li>
+      <li><strong>Shared infrastructure:</strong> diorama core, layout system, palette system, camera anchor helpers</li>
+      <li><strong>Full test suite</strong> — Vitest tests on layout builders, prop specs, and camera anchors</li>
+      <li><strong>Admin dashboard</strong> — approve community requests, moderate reviews</li>
+    </ul>
+  </div>
+
+  <div class="highlight">
+    This is a solo-built project with the depth usually seen in a small team. The procedural 3D architecture means the author is the only bottleneck — not an art pipeline.
+  </div>
+</div>
+
+<!-- SLIDE 14: Live Demo -->
+<div class="slide">
+  <h2>See It Live</h2>
+  <div style="display: flex; gap: 24px; align-items: center; margin-top: 16px;">
+    <div style="flex: 1;">
+      <h3>ExplorePune is live on the web</h3>
+      <p><strong>Production:</strong> <a href="https://explorepune.vercel.app">https://explorepune.vercel.app</a></p>
+      <p><strong>Source code:</strong> <a href="https://github.com/Yash-Kavaiya/Explore-Pune">github.com/Yash-Kavaiya/Explore-Pune</a></p>
+      <p style="margin-top: 12px;">Open any place — for example, <strong>Empress Garden</strong> — and you'll see:</p>
+      <ul>
+        <li>A 3D scene you can drag to orbit and scroll to zoom</li>
+        <li>Numbered hotspots that fly the camera and reveal the story</li>
+        <li>A time-of-day toggle (dawn, golden, dusk)</li>
+        <li>A show-week toggle that places exhibition tents on the lawn</li>
+        <li>Marathi names alongside English for every feature</li>
+        <li>Full visitor etiquette and FAQs</li>
+      </ul>
+    </div>
+    <div style="font-size: 8rem; color: var(--primary); opacity: 0.12; font-weight: 900; text-align: center; transform: rotate(-8deg);">LIVE</div>
+  </div>
+
+  <div class="footer-note">
+    ExplorePune — Discover the soul of Pune. Built with Next.js 16, three.js, and a lot of care for Pune's heritage.
+  </div>
+</div>
+
+</body>
+</html>

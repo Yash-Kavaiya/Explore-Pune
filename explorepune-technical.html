@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ExplorePune — Technical Deep Dive</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --card: #1a1d27;
+    --card2: #22263a;
+    --border: #2d3148;
+    --text: #e4e4ec;
+    --muted: #8a8fa8;
+    --accent: #c45a3a;
+    --primary: #5a9bd5;
+    --code-bg: #12141e;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    font-size: 14px;
+  }
+  .slide {
+    min-height: 100vh;
+    padding: 40px 56px;
+    display: flex;
+    flex-direction: column;
+    page-break-after: always;
+    border-bottom: 1px solid var(--border);
+  }
+  .slide:last-child { page-break-after: auto; }
+  .slide-num {
+    position: fixed;
+    bottom: 12px;
+    right: 24px;
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  h1 { font-size: 2rem; font-weight: 700; color: #fff; margin-bottom: 4px; letter-spacing: -0.02em; }
+  h2 { font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: 16px; margin-top: 0; }
+  h3 { font-size: 1.05rem; font-weight: 600; color: var(--primary); margin-bottom: 6px; margin-top: 14px; }
+  p { margin-bottom: 10px; color: var(--text); }
+  ul, ol { margin-left: 18px; margin-bottom: 12px; }
+  li { margin-bottom: 4px; color: var(--text); }
+  code {
+    background: var(--code-bg);
+    color: #f0c060;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 13px;
+    border: 1px solid #2a2d3a;
+  }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    margin: 10px 0 16px;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: #c8c8d8;
+  }
+  pre .kw { color: #c45a3a; }
+  pre .str { color: #8bc48a; }
+  pre .cm { color: #5a5a7a; font-style: italic; }
+  pre .fn { color: #6ab0e0; }
+  pre .num { color: #d4a050; }
+  pre .ty { color: #b080d0; }
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    margin-top: 12px;
+  }
+  .three-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin-top: 12px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 10px;
+  }
+  .card-accent {
+    border-left: 3px solid var(--accent);
+  }
+  .highlight {
+    background: rgba(196, 90, 58, 0.08);
+    border-left: 3px solid var(--accent);
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin: 12px 0;
+    font-size: 13.5px;
+  }
+  .stat-row {
+    display: flex;
+    gap: 12px;
+    margin: 12px 0;
+    flex-wrap: wrap;
+  }
+  .stat-pill {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .stat-pill strong { color: var(--text); }
+  .file-path {
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+  .cover {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .cover-left { max-width: 560px; }
+  .cover-right {
+    font-size: 5rem;
+    color: var(--primary);
+    opacity: 0.12;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+  }
+  .cover-sub {
+    color: var(--muted);
+    margin-top: 8px;
+    font-size: 14px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 14px;
+    font-size: 13px;
+  }
+  th {
+    background: var(--card2);
+    color: var(--muted);
+    padding: 8px 10px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #1e2130;
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  .fn-return { color: var(--primary); }
+  .folder-tree {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.7;
+    margin: 8px 0 14px;
+    color: var(--text);
+  }
+  .folder-tree .dir { color: var(--primary); }
+  .folder-tree .file { color: var(--text); }
+  .folder-tree .ext { color: var(--muted); }
+  .folder-tree .sep { color: var(--border); }
+  a { color: var(--primary); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<!-- SLIDE 1: Cover -->
+<div class="slide cover">
+  <div class="cover-left">
+    <div class="stat-row">
+      <span class="stat-pill">Next.js 16</span>
+      <span class="stat-pill">React 19</span>
+      <span class="stat-pill">three.js 0.180</span>
+      <span class="stat-pill">TypeScript strict</span>
+      <span class="stat-pill">Tailwind 4</span>
+    </div>
+    <h1>ExplorePune</h1>
+    <p class="cover-sub">Technical architecture deep dive — procedural 3D dioramas, dual-driver data layer, and the rendering model behind a heritage city guide.</p>
+    <p class="cover-sub" style="margin-top: 16px;">github.com/Yash-Kavaiya/Explore-Pune<br>explorepune.vercel.app</p>
+  </div>
+  <div class="cover-right">TECH</div>
+</div>
+
+<!-- SLIDE 2: Project Structure -->
+<div class="slide">
+  <h2>Project Structure</h2>
+  <p>A standard Next.js 16 App Router layout, with a clear separation between shared infrastructure and per-place modules.</p>
+
+  <div class="folder-tree">
+<span class="dir">my-pune-trip/</span>
+├── <span class="dir">app/</span>
+│   ├── <span class="file">page.tsx</span><span class="sep">         </span>← homepage (Hero, CategoryTiles, FeaturedPlaces, Collections, CTA)
+│   ├── <span class="file">layout.tsx</span><span class="sep">        </span>← root layout (theme, nav, footer)
+│   ├── <span class="dir">places/</span>
+│   │   ├── <span class="file">page.tsx</span><span class="sep">        </span>← directory (filter, grid/list/map views)
+│   │   └── <span class="dir">[slug]/</span>
+│   │       └── <span class="file">page.tsx</span><span class="sep">     </span>← place detail — dynamic route, SSR shell, 3D client island
+│   └── <span class="dir">api/</span>
+│       └── <span class="file">uploads/route.ts</span><span class="sep"> </span>← multipart photo upload (Vercel Blob or local)
+├── <span class="dir">components/</span>
+│   ├── <span class="dir">layout/</span><span class="sep">       </span>← footer, theme toggle, UPI support
+│   ├── <span class="dir">places/</span>
+│   │   ├── <span class="file">place-detail.tsx</span><span class="sep"> </span>← place page shell
+│   │   ├── <span class="file">place-cover.tsx</span><span class="sep">  </span>← hero + category badge
+│   │   ├── <span class="file">category-badge.tsx</span><span class="sep">
+│   │   ├── <span class="dir">three/</span><span class="sep">        </span>← diorama-core (shared geometry, palette, markers, anchors)
+│   │   ├── <span class="dir">empress/</span><span class="sep">      </span>← Empress Garden: world (1032 lines), scene, experience, story, tests
+│   │   ├── <span class="dir">saras/</span><span class="sep">         </span>← Saras Baug
+│   │   ├── <span class="dir">dam/</span><span class="sep">           </span>← Khadakwasla Dam
+│   │   ├── <span class="dir">memorial/</span><span class="sep">      </span>← National War Memorial
+│   │   ├── <span class="dir">pataleshwar/</span><span class="sep">   </span>← Pataleshwar Cave Temple
+│   │   ├── <span class="dir">vetal/</span><span class="sep">         </span>← Vetal Tekdi
+│   │   └── ... (agakhan, lalmahal, sinhagad, kelkar, oshow, parwat, okayama, shaniwar)
+│   └── <span class="dir">ui/</span><span class="sep">           </span>← icon.tsx (Lucide)
+├── <span class="dir">lib/</span>
+│   ├── <span class="file">site.ts</span><span class="sep">          </span>← SITE, MAIN_NAV, FOOTER_NAV, centre coords
+│   ├── <span class="file">store/db.ts</span><span class="sep">       </span>← dual-driver DB (Redis / file / unconfigured)
+│   ├── <span class="dir">data/</span><span class="sep">          </span>← per-place editorial content (features, story, etiquette, FAQs)
+│   ├── <span class="file">types.ts</span><span class="sep">         </span>← Audience, CategoryId, Season, PlaceFilters, etc.
+│   ├── <span class="file">places.ts</span><span class="sep">        </span>← getAreas, getSeedPlaces, getFeaturedPlaces, sortPlaces
+│   └── <span class="file">catalog.ts</span><span class="sep">       </span>← getAllPlaces
+├── <span class="dir">data/</span><span class="sep">           </span>← db.json (file driver)
+├── <span class="dir">public/</span><span class="sep">          </span>← uploads/ (local file uploads)
+├── <span class="file">next.config.ts</span><span class="sep">
+├── <span class="file">tsconfig.json</span><span class="sep">
+├── <span class="file">package.json</span><span class="sep">
+└── <span class="file">tailwind.config</span><span class="sep"> </span>(not present — Tailwind 4 uses CSS-first config)
+  </div>
+
+  <div class="two-col">
+    <div>
+      <h3>The per-place pattern</h3>
+      <p>Every place under <code>components/places/&lt;name&gt;/</code> follows the same file shape:</p>
+      <ul>
+        <li><code>&lt;name&gt;-world.ts</code> — procedural 3D world module (layout, anchors, palette, <code>create&lt;Name&gt;World()</code>)</li>
+        <li><code>&lt;name&gt;-scene.tsx</code> — scene-level React component that calls the world factory</li>
+        <li><code>&lt;name&gt;-experience.tsx</code> — the <code>next/dynamic</code> import wrapper + controls UI</li>
+        <li><code>&lt;name&gt;-story.tsx</code> — editorial content imported into <code>place-detail.tsx</code></li>
+        <li><code>&lt;name&gt;-world.test.ts</code> — Vitest tests on layout/anchor helpers (no canvas required)</li>
+      </ul>
+    </div>
+    <div>
+      <h3>What about the data files?</h3>
+      <p><code>lib/data/&lt;name&gt;.ts</code> holds the <strong>editorial content</strong> for each place — separate from the 3D world:</p>
+      <ul>
+        <li><code>FEATURES[]</code> — hotspots with id, title, Marathi name, blurb, full detail</li>
+        <li><code>STATS[]</code> — labelled facts</li>
+        <li><code>STORY[]</code> — narrative sections</li>
+        <li><code>ETIQUETTE[]</code> — visitor guidance</li>
+        <li><code>FAQS[]</code> — Q/A pairs</li>
+      </ul>
+      <p>Feature ids in the data file <strong>double as hotspot ids</strong> in the 3D world — a single source of truth.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 3: Rendering Model -->
+<div class="slide">
+  <h2>Rendering Model: SSR Shell + 3D Client Islands</h2>
+
+  <p>The core architectural decision: <strong>keep WebGL out of the server render</strong>. Every 3D page uses <code>next/dynamic</code> with <code>ssr: false</code> so the canvas only mounts client-side.</p>
+
+  <div class="two-col">
+    <div>
+      <h3>Server-rendered shell</h3>
+      <p><code>app/places/[slug]/page.tsx</code> runs on the server — it fetches the place data, renders the cover, category badge, story headings, stats, etiquette, and FAQs. The first paint is fast HTML + CSS.</p>
+      <p>The 3D <code>&lt;Experience&gt;</code> component is a <code>next/dynamic</code> import:</p>
+      <pre><span class="cm">// app/places/[slug]/page.tsx (conceptual)</span>
+<span class="kw">import</span> dynamic <span class="kw">from</span> <span class="str">'next/dynamic'</span>;
+
+<span class="kw">const</span> Experience = dynamic(
+  () => <span class="kw">import</span>(<span class="str">'@/components/places/place-detail'</span>)
+    .then(m => m.PlaceDetailExperience),
+  { <span class="kw">ssr</span>: <span class="kw">false</span> }
+);
+
+<span class="kw">export default</span> <span class="fn">PlacePage</span>({ params }) {
+  <span class="kw">return</span> (
+    &lt;<span class="fn">div</span>&gt;
+      &lt;<span class="fn">Cover</span> ... /&gt;
+      &lt;<span class="fn">Story</span> ... /&gt;
+      &lt;<span class="fn">Experience</span> place={place} /&gt;
+      &lt;<span class="fn">Etiquette</span> ... /&gt;
+      &lt;<span class="fn">FAQs</span> ... /&gt;
+    &lt;/<span class="fn">div</span>&gt;
+  );
+}</pre>
+    </div>
+    <div>
+      <h3>Client-side 3D island</h3>
+      <p>When the client hydrated and the dynamic import resolves, <code>Experience</code> mounts a <code>&lt;canvas&gt;</code> and calls <code>create&lt;Name&gt;World(container, options)</code>. From that point, everything is WebGL.</p>
+      <p>This split has several benefits:</p>
+      <ul>
+        <li><strong>SEO:</strong> the editorial content is in the initial HTML — Google sees the story, FAQs, Marathi names.</li>
+        <li><strong>Accessibility:</strong> the <code>aria-hidden="true"</code> on the canvas doesn't block screen readers from the text content.</li>
+        <li><strong>Performance:</strong> no JS bundle for 3D is sent to bots or users who never scroll to the canvas.</li>
+        <li><strong>Error isolation:</strong> if WebGL fails (older device, strict privacy settings), the text content still renders.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="highlight">
+    <strong>Next.js config:</strong> <code>next.config.ts</code> should leave the default <code>swcMinify</code> and allow the three.js bundle through. Nothing exotic — Next.js 16 handles the <code>next/dynamic</code> + client component split out of the box.
+  </div>
+</div>
+
+<!-- SLIDE 4: The 3D World Module — Interface -->
+<div class="slide">
+  <h2>The 3D World Module Contract</h2>
+  <p>Every place's <code>*-world.ts</code> exports the same interface. This is what makes the per-place architecture consistent and replaceable.</p>
+
+  <pre><span class="cm">// components/places/empress/empress-world.ts — excerpt</span>
+<span class="kw">import</span> * <span class="kw">as</span> THREE <span class="kw">from</span> <span class="str">'three'</span>;
+<span class="kw">import</span> {
+  SKY_FRAG, SKY_VERT, clamp, damp, markerSprite,
+  mulberry32, radialSprite, smoothstep,
+  <span class="ty">type</span> Palette, <span class="ty">type</span> TimeOfDay,
+} <span class="kw">from</span> <span class="str">'@/components/places/three/diorama-core'</span>;
+
+<span class="cm">// --- Feature types (double as hotspot IDs) ---</span>
+<span class="kw">export type</span> FeatureId =
+  | <span class="str">'old-canopy'</span>
+  | <span class="str">'rolling-lawns'</span>
+  | <span class="str">'rose-garden'</span>
+  | <span class="str">'greenhouse'</span>
+  | <span class="str">'flower-show'</span>;
+
+<span class="kw">export type</span> EmpressMode = <span class="str">'ordinary'</span> | <span class="str">'show'</span>;
+
+<span class="cm">// --- The world object clients interact with ---</span>
+<span class="kw">export type</span> EmpressWorld = {
+  <span class="fn">setTimeOfDay</span>: (t: TimeOfDay) => <span class="kw">void</span>;
+  <span class="fn">setMode</span>:     (m: EmpressMode) => <span class="kw">void</span>;
+  <span class="fn">setActive</span>:   (id: FeatureId | <span class="kw">null</span>) => <span class="kw">void</span>;
+  <span class="fn">resetView</span>:   () => <span class="kw">void</span>;
+  <span class="fn">setPaused</span>:   (paused: <span class="kw">boolean</span>) => <span class="kw">void</span>;
+  <span class="fn">dispose</span>:     () => <span class="kw">void</span>;
+};
+
+<span class="cm">// --- Factory ---</span>
+<span class="kw">export function</span> <span class="fn">createEmpressWorld</span>(
+  container: HTMLElement,
+  options: <span class="ty">EmpressWorldOptions</span>,
+): EmpressWorld { <span class="cm">/* ... */</span> }</pre>
+
+  <table>
+    <tr><th>Method</th><th>Purpose</th></tr>
+    <tr><td><code>setTimeOfDay(t)</code></td><td>Switch between dawn / golden / dusk palettes — sky, sun, fog, exposure all transition.</td></tr>
+    <tr><td><code>setMode(m)</code></td><td>Toggle <code>'ordinary'</code> ↔ <code>'show'</code> — controls whether show-week tents are visually emphasised.</td></tr>
+    <tr><td><code>setActive(id)</code></td><td>Highlight a hotspot, fly the camera to its anchor, and notify the UI to show the feature story.</td></tr>
+    <tr><td><code>resetView()</code></td><td>Return the camera to the home position.</td></tr>
+    <tr><td><code>setPaused(paused)</code></td><td>Pause the render loop — useful when the tab is hidden or the UI overlay is open.</td></tr>
+    <tr><td><code>dispose()</code></td><td>Tear down renderer, scene objects, dispose geometries/materials — critical for React 19 cleanup.</td></tr>
+  </table>
+</div>
+
+<!-- SLIDE 5: Shared Diorama Core -->
+<div class="slide">
+  <h2>Shared Infrastructure: diorama-core.ts</h2>
+  <p>The <code>components/places/three/diorama-core.ts</code> module is the only 3D code that every place shares. Everything else — layout, props, materials — is per-place.</p>
+
+  <div class="two-col">
+    <div>
+      <h3>What's in diorama-core</h3>
+      <ul>
+        <li><strong>Sky shader</strong> — <code>SKY_VERT</code> / <code>SKY_FRAG</code>: a custom GLSL sky dome with sun-direction blending. Used by every place with a sky.</li>
+        <li><strong>Time-of-day types</strong> — <code>TimeOfDay = 'dawn' | 'golden' | 'dusk'</code> — and <code>Palette</code> type: skyTop, skyBottom, sun, sunIntensity, hemiSky, hemiGround, ambient, fog, lantern, sunAzimuth, sunElevation, exposure.</li>
+        <li><strong>Palette helpers</strong> — <code>getEmpressPalette(t)</code> returns one of three palettes. Other places have their own palette functions following the same pattern.</li>
+        <li><strong>Sprite helpers</strong> — <code>markerSprite()</code> and <code>radialSprite()</code> for hotspot markers and lamp flames.</li>
+        <li><strong>Math helpers</strong> — <code>clamp</code>, <code>damp</code>, <code>smoothstep</code>, <code>mulberry32</code> (deterministic seeded PRNG).</li>
+        <li><strong>WebGL support check</strong> — <code>supportsWebGL</code> export so the client can degrade gracefully.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Why this matters</h3>
+      <ul>
+        <li><strong>Consistency:</strong> every scene has the same sky shader, the same marker style, the same palette model.</li>
+        <li><strong>Testability:</strong> palette functions are pure — they return a <code>Palette</code> record. No WebGL, no canvas. Vitest can test them directly.</li>
+        <li><strong>Extensibility:</strong> adding a new time-of-day variant means adding one entry to the <code>Palette</code> type and one palette object — no shader change.</li>
+        <li><strong>The PRNG:</strong> <code>mulberry32(seed)</code> is the reason layouts are deterministic. <code>buildEmpressLayout(seed = 1892)</code> always returns the same 36 trees at the same positions — which means camera anchors are stable and tests are reproducible.</li>
+      </ul>
+    </div>
+  </div>
+
+  <pre><span class="cm">// diorama-core — palette type and helper shape</span>
+<span class="kw">export type</span> Palette = {
+  skyTop:      <span class="ty">string</span>;   <span class="cm">// sky gradient top colour</span>
+  skyBottom:   <span class="ty">string</span>;   <span class="cm">// sky gradient horizon colour</span>
+  sun:         <span class="ty">string</span>;   <span class="cm">// sun disc colour</span>
+  sunIntensity: <span class="ty">number</span>;  <span class="cm">// directional light intensity</span>
+  hemiSky:     <span class="ty">string</span>;
+  hemiGround:  <span class="ty">string</span>;
+  ambient:     <span class="ty">number</span>;   <span class="cm">// hemisphere light intensity</span>
+  fog:         <span class="ty">string</span>;
+  waterDeep:    <span class="ty">string</span>;
+  waterShallow: <span class="ty">string</span>;
+  lantern:     <span class="ty">number</span>;   <span class="cm">// lamp flame intensity multiplier</span>
+  sunAzimuth:     <span class="ty">number</span>;  <span class="cm">// radians, sun compass direction</span>
+  sunElevation:   <span class="ty">number</span>;  <span class="cm">// radians, 0 = horizon, π/2 = zenith</span>
+  exposure:       <span class="ty">number</span>;  <span class="cm">// renderer.toneMappingExposure</span>
+};
+
+<span class="kw">export type</span> TimeOfDay = <span class="str">'dawn'</span> | <span class="str">'golden'</span> | <span class="str">'dusk'</span>;</pre>
+</div>
+
+<!-- SLIDE 6: Empress Garden — World Module Deep Dive -->
+<div class="slide">
+  <h2>Case Study: Empress Garden World (1,032 lines)</h2>
+  <p>The most complete 3D world in the project. Let's walk through how it's built — from layout constants to materials to render loop.</p>
+
+  <div class="two-col">
+    <div>
+      <h3>Layout constants (pure data)</h3>
+      <pre><span class="cm">// Geometric anchors — used by both the builder and the scene</span>
+<span class="kw">export const</span> LAWN        = { halfW: <span class="num">18</span>, halfD: <span class="num">14</span>, y: <span class="num">0</span> };
+<span class="kw">export const</span> ROSE       = { x: <span class="num">-18</span>, z: <span class="num">6</span>, r: <span class="num">8.4</span>, rings: <span class="num">3</span> };
+<span class="kw">export const</span> GREENHOUSE = { x: <span class="num">18</span>, z: <span class="num">-7</span>, w: <span class="num">12.5</span>, d: <span class="num">7.4</span>, h: <span class="num">4.9</span> };
+<span class="kw">export const</span> SHOW       = { z: <span class="num">22</span>, halfW: <span class="num">16</span>, tentCount: <span class="num">6</span> };
+<span class="kw">export const</span> GROVE      = { rInner: <span class="num">22</span>, rOuter: <span class="num">38</span> };
+
+<span class="cm">// Zone predicates — used by terrainHeight, prop placement, colour</span>
+<span class="kw">export function</span> <span class="fn">inLawn</span>(x: <span class="kw">number</span>, z: <span class="kw">number</span>): <span class="kw">boolean</span> { <span class="cm">/* ... */</span> }
+<span class="kw">export function</span> <span class="fn">inRose</span>(x: <span class="kw">number</span>, z: <span class="kw">number</span>): <span class="kw">boolean</span> { <span class="cm">/* ... */</span> }
+<span class="kw">export function</span> <span class="fn">inGreenhouse</span>(x: <span class="kw">number</span>, z: <span class="kw">number</span>): <span class="kw">boolean</span> { <span class="cm">/* ... */</span> }
+<span class="kw">export function</span> <span class="fn">inShowGround</span>(x: <span class="kw">number</span>, z: <span class="kw">number</span>): <span class="kw">boolean</span> { <span class="cm">/* ... */</span> }</pre>
+
+      <h3>What these constants enable</h3>
+      <p>Because everything is defined as named constants, the scene, the story, and the tests can all refer to the same geometry. The <code>id</code> fields in <code>EMPRESS_FEATURES</code> match the <code>FeatureId</code> type exactly — one source of truth.</p>
+    </div>
+    <div>
+      <h3>Prop layout (deterministic seeded)</h3>
+      <pre><span class="cm">// buildEmpressLayout(seed = 1892) — 36 trees, 42 roses, 6 tents</span>
+<span class="kw">export function</span> <span class="fn">buildEmpressLayout</span>(seed = <span class="num">1892</span>): {
+  props: <span class="ty">EmpressPropSpec[]</span>;
+  propCount: <span class="ty">number</span>;
+  markerBases: <span class="ty">Record&lt;FeatureId, { x, y, z }&gt;</span>;
+  treeCount: <span class="ty">number</span>;
+  roseCount: <span class="ty">number</span>;
+  tentCount: <span class="ty">number</span>;
+} {
+  <span class="kw">const</span> rnd = <span class="fn">mulberry32</span>(seed);
+  <span class="kw">const</span> props: <span class="ty">EmpressPropSpec[]</span> = [];
+  <span class="kw">const</span> push = (p: <span class="ty">EmpressPropSpec</span>) => props.push(p);
+
+  <span class="cm">// 36 old-growth trees — rejection-sampled into the grove ring</span>
+  <span class="kw">let</span> guard = <span class="num">0</span>;
+  <span class="kw">const</span> trees: { x, z, s }[] = [];
+  <span class="kw">while</span> (trees.length < <span class="num">36</span> && guard < <span class="num">5000</span>) {
+    guard++;
+    <span class="kw">const</span> x = (rnd() - <span class="num">0.5</span>) * <span class="num">84</span>;
+    <span class="kw">const</span> z = (rnd() - <span class="num">0.5</span>) * <span class="num">80</span>;
+    <span class="kw">const</span> r = Math.hypot(x, z);
+    <span class="kw">if</span> (<span class="fn">inLawn</span>(x, z) && r < <span class="num">12</span>) <span class="kw">continue</span>;
+    <span class="kw">if</span> (<span class="fn">inRose</span>(x, z)) <span class="kw">continue</span>;
+    <span class="kw">if</span> (<span class="fn">inGreenhouse</span>(x, z)) <span class="kw">continue</span>;
+    <span class="kw">if</span> (<span class="fn">inShowGround</span>(x, z)) <span class="kw">continue</span>;
+    <span class="kw">if</span> (r < GROVE.rInner - <span class="num">2</span>) <span class="kw">continue</span>;
+    <span class="kw">if</span> (r > GROVE.rOuter) <span class="kw">continue</span>;
+    <span class="kw">if</span> (trees.some(t => Math.hypot(t.x - x, t.z - z) < <span class="num">5.6</span>)) <span class="kw">continue</span>;
+    trees.push({ x, z, s: <span class="num">1.05</span> + rnd() * <span class="num">0.7</span> });
+  }
+  <span class="cm">// ... roses, lamps, benches, tents follow the same pattern</span>
+}</pre>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <span class="stat-pill">36 trees</span>
+    <span class="stat-pill">42 rose bushes</span>
+    <span class="stat-pill">6 tents (show mode)</span>
+    <span class="stat-pill">4 lamp posts</span>
+    <span class="stat-pill">4 benches</span>
+    <span class="stat-pill">1 greenhouse</span>
+    <span class="stat-pill">Deterministic seed: 1892</span>
+  </div>
+</div>
+
+<!-- SLIDE 7: Terrain & Material System -->
+<div class="slide">
+  <h2>Terrain, Materials &amp; Instancing</h2>
+
+  <div class="two-col">
+    <div>
+      <h3>Terrain: vertex-displaced plane</h3>
+      <pre><span class="cm">// 120×116 plane, subdivided 110×106 — 11,660 vertices</span>
+<span class="kw">const</span> groundGeo = <span class="fn">track</span>(<span class="kw">new</span> THREE.PlaneGeometry(<span class="num">120</span>, <span class="num">116</span>, <span class="num">110</span>, <span class="num">106</span>));
+groundGeo.rotateX(-Math.PI / <span class="num">2</span>);
+<span class="kw">const</span> pos = groundGeo.attributes.position <span class="kw">as</span> THREE.BufferAttribute;
+<span class="kw">for</span> (<span class="kw">let</span> i = <span class="num">0</span>; i < pos.count; i++)
+  pos.setY(i, <span class="fn">terrainHeight</span>(pos.getX(i), pos.getZ(i)));
+groundGeo.computeVertexNormals();
+
+<span class="cm">// terrainHeight() — multi-zone height field</span>
+<span class="kw">export function</span> <span class="fn">terrainHeight</span>(x: <span class="kw">number</span>, z: <span class="kw">number</span>): <span class="kw">number</span> {
+  <span class="kw">let</span> h = <span class="num">0.12</span> * Math.sin(x * <span class="num">0.09</span>) * Math.cos(z * <span class="num">0.08</span>);
+  <span class="kw">if</span> (<span class="fn">inLawn</span>(x, z)) h = <span class="num">0.04</span> * Math.sin(x * <span class="num">0.2</span>) * Math.cos(z * <span class="num">0.18</span>);
+  <span class="kw">if</span> (<span class="fn">inRose</span>(x, z)) h = <span class="num">0.08</span>;
+  <span class="kw">if</span> (<span class="fn">inGreenhouse</span>(x, z)) h = <span class="num">0.22</span>;
+  <span class="kw">const</span> outside = Math.max(Math.abs(x), Math.abs(z)) - <span class="num">52</span>;
+  <span class="kw">if</span> (outside > -<span class="num">1</span>) h -= <span class="num">16</span> * <span class="fn">smoothstep</span>(-<span class="num">1</span>, <span class="num">6</span>, outside);
+  <span class="kw">return</span> h;
+}</pre>
+      <p>The terrain receives vertex colours per zone — lawn greens, rose-bed browns, show-ground dust — so the ground reads as distinct areas without texture maps.</p>
+    </div>
+    <div>
+      <h3>Instanced meshes for performance</h3>
+      <pre><span class="cm">// 36 trees — 1 trunk geometry, 1 canopy geometry, 2 InstancedMesh calls</span>
+<span class="kw">const</span> trees = layout.props.filter(p => p.kind === <span class="str">'tree'</span>);
+<span class="kw">const</span> trunks   = <span class="kw">new</span> THREE.InstancedMesh(trunkGeo, trunkMat, trees.length);
+<span class="kw">const</span> canopies = <span class="kw">new</span> THREE.InstancedMesh(canopyGeo, leafMat, trees.length * <span class="num">3</span>);
+<span class="cm">// 3 canopy spheres per tree (bottom, mid, top) for volume</span>
+
+<span class="cm">// 42 rose bushes — 2 InstancedMesh (blooms + foliage) from 1 sphere geo</span>
+<span class="kw">const</span> roses = layout.props.filter(p => p.kind === <span class="str">'rose'</span>);
+<span class="kw">const</span> blooms   = <span class="kw">new</span> THREE.InstancedMesh(bushGeo, roseMat, roses.length);
+<span class="kw">const</span> foliage  = <span class="kw">new</span> THREE.InstancedMesh(bushGeo, roseLeafMat, roses.length);
+
+<span class="cm">// Each instance: Matrix4.compose(position, quaternion, scale)</span>
+trees.forEach((t, i) => {
+  m.compose(<span class="kw">new</span> THREE.Vector3(t.x, t.y + <span class="num">2.2</span> * t.scale, t.z),
+             q, <span class="kw">new</span> THREE.Vector3(t.scale, t.scale, t.scale));
+  trunks.setMatrixAt(i, m);
+  <span class="cm">// 3 canopy instances per tree...</span>
+});</pre>
+      <table>
+        <tr><th>Technique</th><th>Used for</th></tr>
+        <tr><td><code>InstancedMesh</code></td><td>Trees (36 trunks + 108 canopy spheres), roses (42 blooms + 42 foliage), tents</td></tr>
+        <tr><td>Vertex colours</td><td>Ground terrain — zone-based colouring without textures</td></tr>
+        <tr><td>Custom ShaderMaterial</td><td>Sky dome (SKY_VERT / SKY_FRAG) — sun-direction blending</td></tr>
+        <tr><td>SpriteMaterial</td><td>Lamp flames, hotspot markers — additive blending, always face camera</td></tr>
+        <tr><td><code>track()</code> helper</td><td>Every disposable object pushed to a disposables array for cleanup</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="highlight">
+    <strong><code>track()</code> pattern:</strong> <code>const track = &lt;T extends { dispose: () => void }&gt;(item: T): T =&gt; { disposables.push(item); return item; };</code> — every geometry, material, mesh, sprite is tracked so <code>dispose()</code> can tear them all down in one pass. This is the cleanup story that prevents WebGL context leaks during React 19 remounts.
+  </div>
+</div>
+
+<!-- SLIDE 8: Camera System -->
+<div class="slide">
+  <h2>Camera System: Anchors, Home View &amp; Hotspot Flight</h2>
+
+  <div class="two-col">
+    <div>
+      <h3>Anchor definitions</h3>
+      <p>Each feature hotspot has a camera anchor — a target point, a look direction, and a distance. These are built once at module load and reused for every flight.</p>
+      <pre><span class="kw">export function</span> <span class="fn">getEmpressAnchors</span>(): <span class="ty">Record&lt;</span>
+  FeatureId, { target: [<span class="kw">number</span>, <span class="kw">number</span>, <span class="kw">number</span>];
+               dir: [<span class="kw">number</span>, <span class="kw">number</span>, <span class="kw">number</span>];
+               distance: <span class="kw">number</span>; }
+&gt; {
+  <span class="kw">return</span> {
+    <span class="str">'old-canopy'</span>:    { target: [<span class="num">22</span>, <span class="num">3</span>, <span class="num">-14</span>], dir: [<span class="num">0.55</span>, <span class="num">0.4</span>, <span class="num">0.73</span>], distance: <span class="num">26</span> },
+    <span class="str">'rolling-lawns'</span>: { target: [<span class="num">0</span>, <span class="num">0.4</span>, <span class="num">0</span>],   dir: [<span class="num">0.12</span>, <span class="num">0.55</span>, <span class="num">0.83</span>], distance: <span class="num">32</span> },
+    <span class="str">'rose-garden'</span>:   { target: [ROSE.x, <span class="num">0.6</span>, ROSE.z], dir: [-<span class="num">0.5</span>, <span class="num">0.42</span>, <span class="num">0.76</span>], distance: <span class="num">18</span> },
+    greenhouse:       { target: [GREENHOUSE.x, <span class="num">2.2</span>, GREENHOUSE.z + <span class="num">1</span>],
+                       dir: [<span class="num">0.62</span>, <span class="num">0.38</span>, <span class="num">0.69</span>], distance: <span class="num">18</span> },
+    <span class="str">'flower-show'</span>:   { target: [<span class="num">0</span>, <span class="num">1.4</span>, SHOW.z],  dir: [<span class="num">0.1</span>, <span class="num">0.36</span>, <span class="num">0.93</span>], distance: <span class="num">22</span> },
+  };
+}</pre>
+      <p><code>target</code> = where the camera looks at (world space).<br><code>dir</code> = normalized look direction (used for orbit constraints).<br><code>distance</code> = how far the camera sits from the target.</p>
+    </div>
+    <div>
+      <h3>Home view &amp; flight</h3>
+      <pre><span class="kw">export function</span> <span class="fn">getEmpressHomeView</span>() {
+  <span class="kw">return</span> {
+    target: [<span class="num">0</span>, <span class="num">2.2</span>, <span class="num">2</span>] <span class="kw">as</span> [<span class="kw">number</span>, <span class="kw">number</span>, <span class="kw">number</span>],
+    radius: <span class="num">40</span>,
+    phi:    <span class="num">1.16</span>,   <span class="cm">// polar angle from +Y</span>
+    theta:  <span class="num">0.3</span>,    <span class="cm">// azimuth from +Z</span>
+  };
+}
+
+<span class="cm">// The returned object is converted into a THREE.Vector3 target</span>
+<span class="cm">// and a spherical camera position in createEmpressWorld().</span>
+
+<span class="cm">// setActive(id) → fly camera to anchor[id], then show feature story</span>
+<span class="cm">// resetView()    → fly back to HOME</span></pre>
+
+      <h3>OrbitControls (conceptual)</h3>
+      <p>The camera is an <code>OrbitCamera</code> (a spherical-coordinate wrapper around <code>PerspectiveCamera</code>):</p>
+      <ul>
+        <li><code>radius</code> — distance from target (scroll to zoom in/out)</li>
+        <li><code>phi</code> — polar angle (drag up/down)</li>
+        <li><code>theta</code> — azimuth (drag left/right)</li>
+        <li>Constraints: min/max radius, min/max phi so the user can't orbit through the ground or zoom into the sun</li>
+      </ul>
+      <p>When <code>setActive(id)</code> is called, the camera spherical coordinates interpolate to the anchor's target+distance+phi+theta, and the <code>onSelect</code> callback fires to surface the feature UI.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 9: Lighting & Palette System -->
+<div class="slide">
+  <h2>Lighting &amp; Palette System</h2>
+
+  <p>Every place has 2–3 time-of-day palettes. The palette is a plain data object — the world module consumes it to reconfigure the scene's lights, sky, fog, and exposure.</p>
+
+  <pre><span class="cm">// PALETTES — dawn, golden, dusk for Empress Garden</span>
+<span class="kw">const</span> PALETTES: <span class="ty">Record&lt;TimeOfDay, Palette&gt;</span> = {
+  dawn: {
+    skyTop: <span class="str">'#1a3c58'</span>, skyBottom: <span class="str">'#f0d4b4'</span>, sun: <span class="str">'#ffd6a8'</span>,
+    sunIntensity: <span class="num">2.15</span>, hemiSky: <span class="str">'#b4ccdc'</span>, hemiGround: <span class="str">'#4a4a34'</span>,
+    ambient: <span class="num">0.78</span>, fog: <span class="str">'#e6d8b8'</span>, lantern: <span class="num">0.18</span>,
+    sunAzimuth: <span class="num">2.1</span>, sunElevation: <span class="num">0.28</span>, exposure: <span class="num">1.04</span>,
+  },
+  golden: {
+    skyTop: <span class="str">'#3a2848'</span>, skyBottom: <span class="str">'#ffc084'</span>, sun: <span class="str">'#ffb060'</span>,
+    sunIntensity: <span class="num">2.7</span>, hemiSky: <span class="str">'#d0c0c8'</span>, hemiGround: <span class="str">'#5a5034'</span>,
+    ambient: <span class="num">0.8</span>, fog: <span class="str">'#f0d0a0'</span>, lantern: <span class="num">0.4</span>,
+    sunAzimuth: -<span class="num">0.7</span>, sunElevation: <span class="num">0.3</span>, exposure: <span class="num">1.0</span>,
+  },
+  dusk: {
+    skyTop: <span class="str">'#060814'</span>, skyBottom: <span class="str">'#28182c'</span>, sun: <span class="str">'#6a64b8'</span>,
+    sunIntensity: <span class="num">0.28</span>, hemiSky: <span class="str">'#222848'</span>, hemiGround: <span class="str">'#141218'</span>,
+    ambient: <span class="num">0.32</span>, fog: <span class="str">'#161224'</span>, lantern: <span class="num">1.0</span>,
+    sunAzimuth: -<span class="num">1.3</span>, sunElevation: <span class="num">0.05</span>, exposure: <span class="num">1.14</span>,
+  },
+};</pre>
+
+  <div class="two-col">
+    <div>
+      <h3>Lighting rig</h3>
+      <ul>
+        <li><strong>HemisphereLight</strong> — sky colour → ground colour, intensity = <code>ambient</code>. Soft fill light, no shadows.</li>
+        <li><strong>DirectionalLight (sun)</strong> — colour = <code>sun</code>, intensity = <code>sunIntensity</code>, casts shadows. 2048×2048 shadow map, 80-unit frustum, bias tuned to avoid shadow acne.</li>
+        <li><strong>Sun direction</strong> — computed from <code>azimuth</code> + <code>elevation</code> every frame when the palette changes: <code>sunDir.set(cos(az)*cos(e), sin(e), sin(az)*cos(e)).normalize()</code></li>
+        <li><strong>Fog</strong> — <code>THREE.Fog(palette.fog, 150, 500)</code> — colour matches the horizon, density tuned per palette.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Sky shader</h3>
+      <pre><span class="cm">// SKY_VERT / SKY_FRAG — custom GLSL</span>
+<span class="cm">// Uniforms: topColor, bottomColor, sunDir, sunColor</span>
+<span class="cm">// A BackSide sphere (radius 420) renders the sky dome.</span>
+
+<span class="cm">// On palette change:</span>
+cur.skyTop.<span class="fn">set</span>(palette.skyTop);
+cur.skyBottom.<span class="fn">set</span>(palette.skyBottom);
+cur.sun.<span class="fn">set</span>(palette.sun);
+skyMat.uniforms.skyTopColor.<span class="fn">value</span>.<span class="fn">copy</span>(cur.skyTop);
+skyMat.uniforms.skyBottomColor.<span class="fn">value</span>.<span class="fn">copy</span>(cur.skyBottom);
+skyMat.uniforms.sunColor.<span class="fn">value</span>.<span class="fn">copy</span>(cur.sun);
+skyMat.uniforms.sunDir.<span class="fn">value</span>.<span class="fn">copy</span>(sunDir);
+
+renderer.toneMappingExposure = palette.exposure;</pre>
+      <p>The sky shader blends <code>topColor</code> and <code>bottomColor</code> by vertical position, then tints the horizon by the sun direction — a cheap approximation of atmospheric scattering that reads well at the scale of a diorama.</p>
+    </div>
+  </div>
+
+  <div class="highlight">
+    <strong>Why palettes are data, not code:</strong> each palette is a plain <code>Record&lt;string, string|number&gt;</code>. To add a "monsoon" palette to any place, you add one entry to the <code>TimeOfDay</code> union, one object to the palette map, and one toggle in the UI. No shader code, no geometry code.
+  </div>
+</div>
+
+<!-- SLIDE 10: Data Layer — Deep Dive -->
+<div class="slide">
+  <h2>Data Layer: Dual-Driver Database</h2>
+
+  <p><code>lib/store/db.ts</code> is the single seam every data operation goes through. Three drivers, chosen at runtime from environment variables.</p>
+
+  <pre><span class="cm">// lib/store/db.ts — driver abstraction</span>
+<span class="kw">export type</span> Database = {
+  requests: <span class="ty">PlaceRequest[]</span>;
+  reviews:  <span class="ty">Review[]</span>;
+  views:    <span class="ty">Record&lt;<span class="kw">string</span>, <span class="kw">number</span>&gt;</span>;   <span class="cm">// placeSlug → view count</span>
+};
+
+<span class="kw">type</span> Driver = {
+  <span class="fn">read</span>():  <span class="ty">Promise&lt;Database&gt;</span>;
+  <span class="fn">write</span>(<span class="ty">db</span>: Database): <span class="ty">Promise&lt;<span class="kw">void</span>&gt;</span>;
+};
+
+<span class="cm">// --- File driver (local dev, self-hosting) ---</span>
+<span class="kw">function</span> <span class="fn">fileDriver</span>(): Driver {
+  <span class="kw">return</span> {
+    <span class="fn">read</span>() {
+      <span class="kw">try</span> {
+        <span class="kw">const</span> raw = <span class="kw">await</span> fs.<span class="fn">readFile</span>(DB_FILE, <span class="str">'utf8'</span>);
+        <span class="kw">return</span> <span class="fn">hydrate</span>(<span class="kw">JSON</span>.parse(raw) <span class="kw">as</span> <span class="ty">Partial&lt;Database&gt;</span>);
+      } <span class="kw">catch</span> (err) {
+        <span class="kw">if</span> ((err <span class="kw">as</span> <span class="ty">NodeJS.ErrnoException</span>).code === <span class="str">'ENOENT'</span>)
+          <span class="kw">return</span> <span class="fn">structuredClone</span>(EMPTY);
+        <span class="kw">throw</span> err;
+      }
+    },
+    <span class="fn">write</span>(db) {
+      <span class="kw">await</span> fs.<span class="fn">mkdir</span>(DATA_DIR, { recursive: <span class="kw">true</span> });
+      <span class="cm">// Atomic: write temp, then rename — crash-safe</span>
+      <span class="kw">const</span> tmp = <span class="str">`${DB_FILE}.${process.pid}.tmp`</span>;
+      <span class="kw">await</span> fs.<span class="fn">writeFile</span>(tmp, <span class="kw">JSON</span>.stringify(db, <span class="kw">null</span>, <span class="num">2</span>), <span class="str">'utf8'</span>);
+      <span class="kw">await</span> fs.<span class="fn">rename</span>(tmp, DB_FILE);
+    },
+  };
+}
+
+<span class="cm">// --- Redis driver (Vercel production) ---</span>
+<span class="kw">function</span> <span class="fn">redisDriver</span>(credentials: { url, token }): Driver {
+  <span class="kw">const</span> redis = <span class="kw">new</span> <span class="ty">Redis</span>(credentials);
+  <span class="kw">return</span> {
+    <span class="fn">read</span>() {
+      <span class="kw">return</span> <span class="fn">hydrate</span>(<span class="kw">await</span> redis.<span class="fn">get</span>&lt;<span class="ty">Partial&lt;Database&gt;</span>&gt;(REDIS_KEY));
+    },
+    <span class="fn">write</span>(db) {
+      <span class="kw">await</span> redis.<span class="fn">set</span>(REDIS_KEY, db);
+    },
+  };
+}
+
+<span class="cm">// --- Unconfigured driver (Vercel without Redis) ---</span>
+<span class="kw">function</span> <span class="fn">unconfiguredDriver</span>(): Driver {
+  <span class="kw">return</span> {
+    <span class="fn">read</span>()  { <span class="kw">return</span> <span class="fn">structuredClone</span>(EMPTY); },
+    <span class="fn">write</span>() { <span class="kw">throw</span> <span class="kw">new</span> <span class="ty">Error</span>(
+      <span class="str">'No database configured. Connect a Redis store...'</span>); },
+  };
+}</pre>
+
+  <div class="two-col">
+    <div>
+      <h3>Driver selection logic</h3>
+      <pre><span class="kw">function</span> <span class="fn">activeDriver</span>(): Driver {
+  <span class="kw">if</span> (driver) <span class="kw">return</span> driver;
+  <span class="kw">const</span> credentials = <span class="fn">redisCredentials</span>();
+  <span class="kw">if</span> (credentials)      driver = <span class="fn">redisDriver</span>(credentials);
+  <span class="kw">else if</span> (process.env.<span class="ty">VERCEL</span>) driver = <span class="fn">unconfiguredDriver</span>();
+  <span class="kw">else</span>                   driver = <span class="fn">fileDriver</span>();
+  <span class="kw">return</span> driver;
+}
+
+<span class="kw">export function</span> <span class="fn">isPersistent</span>(): <span class="kw">boolean</span> {
+  <span class="kw">return</span> redisCredentials() !== <span class="kw">null</span> || !process.env.<span class="ty">VERCEL</span>;
+}</pre>
+      <p>Credential detection accepts both Vercel's injected <code>KV_REST_API_*</code> and Upstash's own <code>UPSTASH_REDIS_REST_*</code> names — so the app works whether the store was provisioned through the Vercel integration or directly.</p>
+    </div>
+    <div>
+      <h3>Write queue</h3>
+      <pre><span class="kw">let</span> writeQueue: <span class="ty">Promise&lt;<span class="kw">unknown</span>&gt;</span> = <span class="fn">Promise</span>.resolve();
+
+<span class="kw">export async function</span> <span class="fn">mutate</span>&lt;T&gt;(
+  mutator: (db: <span class="ty">Database</span>) => T | <span class="ty">Promise&lt;T&gt;</span>
+): <span class="ty">Promise&lt;T&gt;</span> {
+  <span class="kw">const</span> run = <span class="kw">async</span> () => {
+    <span class="kw">const</span> store = <span class="fn">activeDriver</span>();
+    <span class="kw">const</span> db    = <span class="kw">await</span> store.<span class="fn">read</span>();
+    <span class="kw">const</span> result = <span class="kw">await</span> <span class="fn">mutator</span>(db);
+    <span class="kw">await</span> store.<span class="fn">write</span>(db);
+    <span class="kw">return</span> result;
+  };
+  <span class="kw">const</span> next = writeQueue.<span class="fn">then</span>(run, run);
+  writeQueue = next.<span class="fn">then</span>(
+    () => <span class="kw">undefined</span>,
+    () => <span class="kw">undefined</span>,
+  );
+  <span class="kw">return</span> next;
+}</pre>
+      <p><strong>Serialised writes:</strong> every <code>mutate()</code> call goes through a single promise chain, so two concurrent mutations in the same process can't interleave.</p>
+      <p><strong>Trade-off acknowledged:</strong> across serverless instances (Vercel cold starts, multiple function invocations), the queue is per-instance — two instances can still race. At this app's write volume, the team has chosen simplicity over distributed consistency.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 11: File Upload API -->
+<div class="slide">
+  <h2>File Upload API: <code>app/api/uploads/route.ts</code></h2>
+
+  <pre><span class="cm">// app/api/uploads/route.ts — multipart photo upload</span>
+<span class="kw">export const</span> runtime = <span class="str">'nodejs'</span>;
+<span class="kw">export const</span> dynamic = <span class="str">'force-dynamic'</span>;
+
+<span class="kw">const</span> UPLOAD_DIR      = path.join(process.cwd(), <span class="str">'public'</span>, <span class="str">'uploads'</span>);
+<span class="kw">const</span> MAX_FILES       = <span class="num">6</span>;
+<span class="kw">const</span> MAX_BYTES       = <span class="num">4</span> * <span class="num">1024</span> * <span class="num">1024</span>;   <span class="cm">// 4 MB per photo</span>
+<span class="kw">const</span> EXT_BY_TYPE: <span class="ty">Record&lt;<span class="kw">string</span>, <span class="kw">string</span>&gt;</span> = {
+  <span class="str">'image/jpeg'</span>: <span class="str">'jpg'</span>,
+  <span class="str">'image/png'</span>:  <span class="str">'png'</span>,
+  <span class="str">'image/webp'</span>: <span class="str">'webp'</span>,
+  <span class="str">'image/gif'</span>:  <span class="str">'gif'</span>,
+};
+
+<span class="kw">export async function</span> <span class="fn">POST</span>(request: <span class="ty">Request</span>) {
+  <span class="kw">const</span> form = <span class="kw">await</span> request.<span class="fn">formData</span>().<span class="fn">catch</span>(() => <span class="kw">null</span>);
+  <span class="kw">if</span> (!form) <span class="kw">return</span> <span class="fn">NextResponse</span>.<span class="fn">json</span>(
+    { error: <span class="str">'Expected multipart form data'</span> }, { status: <span class="num">400</span> });
+
+  <span class="kw">const</span> files = form.<span class="fn">getAll</span>(<span class="str">'files'</span>)
+    .filter((f): f <span class="kw">is</span> <span class="ty">File</span> => f <span class="kw">instanceof</span> <span class="ty">File</span>);
+
+  <span class="kw">if</span> (files.length === <span class="num">0</span>)
+    <span class="kw">return</span> <span class="fn">NextResponse</span>.<span class="fn">json</span>({ error: <span class="str">'No files provided'</span> }, { status: <span class="num">400</span> });
+
+  <span class="kw">if</span> (files.length > MAX_FILES)
+    <span class="kw">return</span> <span class="fn">NextResponse</span>.<span class="fn">json</span>(
+      { error: <span class="str">`Up to ${MAX_FILES} photos allowed`</span> }, { status: <span class="num">400</span> });
+
+  <span class="cm">// Validate everything before writing — no half-persisted batch</span>
+  <span class="kw">for</span> (<span class="kw">const</span> file <span class="kw">of</span> files) {
+    <span class="kw">if</span> (!EXT_BY_TYPE[file.type])
+      <span class="kw">return</span> <span class="fn">NextResponse</span>.<span class="fn">json</span>(
+        { error: <span class="str">'Only JPG, PNG, WEBP or GIF images are allowed'</span> },
+        { status: <span class="num">400</span> });
+    <span class="kw">if</span> (file.size > MAX_BYTES)
+      <span class="kw">return</span> <span class="fn">NextResponse</span>.<span class="fn">json</span>(
+        { error: <span class="str">'Each photo must be under 4 MB'</span> }, { status: <span class="num">400</span> });
+  }
+
+  <span class="kw">const</span> useBlob = <span class="kw">Boolean</span>(process.env.<span class="ty">BLOB_READ_WRITE_TOKEN</span>);
+  <span class="kw">if</span> (!useBlob) <span class="kw">await</span> fs.<span class="fn">mkdir</span>(UPLOAD_DIR, { recursive: <span class="kw">true</span> });
+
+  <span class="kw">const</span> urls: <span class="ty">string[]</span> = [];
+  <span class="kw">for</span> (<span class="kw">const</span> file <span class="kw">of</span> files) {
+    <span class="kw">const</span> name = <span class="str">`${Date.now().toString(36)}-${randomUUID().slice(0, 8)}.${EXT_BY_TYPE[file.type]}`</span>;
+    <span class="kw">if</span> (useBlob) {
+      <span class="kw">const</span> blob = <span class="kw">await</span> <span class="fn">put</span>(<span class="str">`uploads/${name}`</span>, file, {
+        access: <span class="str">'public'</span>, contentType: file.type,
+      });
+      urls.push(blob.url);
+    } <span class="kw">else</span> {
+      <span class="kw">await</span> fs.<span class="fn">writeFile</span>(
+        path.join(UPLOAD_DIR, name),
+        <span class="kw">Buffer</span>.from(<span class="kw">await</span> file.arrayBuffer()));
+      urls.push(<span class="str">`/uploads/${name}`</span>);
+    }
+  }
+
+  <span class="kw">return</span> <span class="fn">NextResponse</span>.<span class="fn">json</span>({ urls }, { status: <span class="num">201</span> });
+}</pre>
+
+  <div class="two-col">
+    <div>
+      <h3>Design decisions</h3>
+      <ul>
+        <li><strong>Multipart parsing on the server</strong> — no client-side upload library. The browser sends a <code>FormData</code> body, the route reads it.</li>
+        <li><strong>Validate first, write second</strong> — the entire batch is validated before any file is persisted. A bad file late in the batch can't leave half the uploads on disk.</li>
+        <li><strong>Dual storage</strong> — Vercel Blob (<code>@vercel/blob</code> <code>put()</code>) when <code>BLOB_READ_WRITE_TOKEN</code> is set; local <code>/public/uploads/</code> otherwise. This keeps <code>next dev</code> and self-hosting working without a cloud account.</li>
+        <li><strong>Filename:</strong> <code>{timestamp-in-base36}-{uuid-slice}.{ext}</code> — collision-resistant, sortable by time, no user data in the name.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Limits &amp; known ceiling</h3>
+      <ul>
+        <li>A Vercel function request body maxes out at ~4.5 MB total. <code>MAX_FILES × MAX_BYTES</code> (6 × 4 MB = 24 MB) is not reachable in a single request on Vercel — the function would hit the body limit first. The constants are sized so dev/local uploads work fully, and Vercel uploads cap naturally at the function boundary.</li>
+        <li>Raising the ceiling requires a client-side upload (<code>upload()</code> from <code>@vercel/blob/client</code>) that streams past the function — a documented future upgrade.</li>
+        <li>Vercel Blob stores the file with <code>access: 'public'</code> — the returned URL is directly servable, no signed expiry.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 12: Environment & Config -->
+<div class="slide">
+  <h2>Environment Variables &amp; Config Resolution</h2>
+
+  <pre><span class="cm">// lib/site.ts — central site configuration</span>
+<span class="kw">function</span> <span class="fn">resolveSiteUrl</span>(): <span class="ty">string</span> {
+  <span class="kw">if</span> (process.env.<span class="ty">NEXT_PUBLIC_SITE_URL</span>)
+    <span class="kw">return</span> process.env.<span class="ty">NEXT_PUBLIC_SITE_URL</span>;
+  <span class="kw">const</span> vercelHost =
+    process.env.<span class="ty">NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL</span>
+    ?? process.env.<span class="ty">NEXT_PUBLIC_VERCEL_URL</span>;
+  <span class="kw">return</span> vercelHost ? <span class="str">`https://${vercelHost}`</span> : <span class="str">'http://localhost:3000'</span>;
+}
+
+<span class="kw">export const</span> SITE = {
+  name: <span class="str">'ExplorePune'</span>,
+  tagline: <span class="str">'Discover the soul of Pune'</span>,
+  description: <span class="str">'...'</span>,
+  url: <span class="fn">resolveSiteUrl</span>(),
+  locale: <span class="str">'en_IN'</span>,
+  center: { lat: <span class="num">18.5204</span>, lng: <span class="num">73.8567</span> },  <span class="cm">// Pune city centre</span>
+  upiId:    <span class="str">'explorepune@ybl'</span>,
+  upiName:  <span class="str">'ExplorePune'</span>,
+} <span class="kw">as const</span>;</pre>
+
+  <table>
+    <tr><th>Variable</th><th>Source</th><th>Purpose</th></tr>
+    <tr><td><code>NEXT_PUBLIC_SITE_URL</code></td><td>User-set (optional)</td><td>Overrides the base URL for metadata, OG tags, sitemap. Explicit wins.</td></tr>
+    <tr><td><code>NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL</code></td><td>Injected by Vercel (production)</td><td>Fallback for production deployments — stable domain across deploys.</td></tr>
+    <tr><td><code>NEXT_PUBLIC_VERCEL_URL</code></td><td>Injected by Vercel (any deploy)</td><td>Fallback for preview deployments — gives each preview a self-consistent URL.</td></tr>
+    <tr><td><code>KV_REST_API_URL</code> / <code>UPSTASH_REDIS_REST_URL</code></td><td>Vercel Upstash integration or direct</td><td>Redis REST endpoint — present when a store is connected.</td></tr>
+    <tr><td><code>KV_REST_API_TOKEN</code> / <code>UPSTASH_REDIS_REST_TOKEN</code></td><td>Same as above</td><td>Redis auth token.</td></tr>
+    <tr><td><code>BLOB_READ_WRITE_TOKEN</code></td><td>Vercel Blob integration</td><td>Present when Vercel Blob is connected — switches upload storage from local to cloud.</td></tr>
+    <tr><td><code>VERCEL</code></td><td>Injected by Vercel at runtime</td><td>Bool — when true, the file driver is skipped in favour of unconfigured (fail-closed) so a read-only filesystem never throws EROFS.</td></tr>
+  </table>
+
+  <div class="highlight">
+    <strong>Fail-closed writes:</strong> on Vercel without Redis, <code>mutate()</code> throws a clear error pointing to DEPLOYMENT.md rather than dying on a read-only filesystem with an opaque EROFS. Reads degrade to empty so pages still render — the review/suggest features just don't persist.
+  </div>
+</div>
+
+<!-- SLIDE 13: Testing Strategy -->
+<div class="slide">
+  <h2>Testing: Vitest on Pure Helpers</h2>
+
+  <p>The project's tests live on the <strong>pure, canvas-free helpers</strong> — layout builders, zone predicates, anchor generators, palette functions. This is deliberate: WebGL is hard to test in a headless environment, so the architecture isolates the testable bits.</p>
+
+  <div class="two-col">
+    <div>
+      <h3>What's tested (examples)</h3>
+      <pre><span class="cm">// components/places/saras/baug-world.test.ts</span>
+<span class="cm">// - buildSarasBaugLayout() returns the right prop count</span>
+<span class="cm">// - markerBases match feature IDs</span>
+<span class="cm">// - zone predicates (inBaug, inTemple) behave as expected</span>
+
+<span class="cm">// components/places/dam/dam-world.test.ts</span>
+<span class="cm">// - dam layout: wall, sluices, lake, chowpatty positions</span>
+<span class="cm">// - terrain height field at known points</span>
+
+<span class="cm">// components/places/memorial/memorial-world.test.ts</span>
+<span class="cm">// - column height, flame position, vehicle placements</span>
+
+<span class="cm">// components/places/pataleshwar/cave-world.test.ts</span>
+<span class="cm">// - cave chamber dimensions, Nandi circle, linga position</span>
+
+<span class="cm">// components/places/vetal/hill-world.test.ts</span>
+<span class="cm">// - hill slope, shrine position, quarry pond bounds</span></pre>
+    </div>
+    <div>
+      <h3>Why this works</h3>
+      <ul>
+        <li><strong>Layout helpers are pure functions</strong> — <code>buildEmpressLayout(seed)</code> returns a plain object. No <code>THREE.Scene</code>, no renderer. Vitest can call it and assert on the result.</li>
+        <li><strong>Zone predicates are pure</strong> — <code>inLawn(x, z)</code> returns a bool. Test it at boundary points.</li>
+        <li><strong>Anchor generators are pure</strong> — <code>getEmpressAnchors()</code> returns a record of plain arrays. Test that each feature id maps to an anchor.</li>
+        <li><strong>Palettes are data</strong> — <code>getEmpressPalette('dawn')</code> returns a <code>Palette</code> object. Test that it's the right shape and values.</li>
+      </ul>
+      <p>The WebGL path itself — <code>createEmpressWorld(container, options)</code> — is covered by the manual visual check: open the page, orbit, click hotspots, toggle modes. Automated canvas tests would be fragile and are not worth the maintenance cost at this stage.</p>
+    </div>
+  </div>
+
+  <pre><span class="cm">// Running the suite</span>
+$ npx vitest run
+  <span class="cm"># → tests for layout builders, zone predicates, anchors, palettes</span>
+
+$ npx tsc --noEmit
+  <span class="cm"># → strict TypeScript across the whole project</span>
+
+$ npm run lint
+  <span class="cm"># → ESLint with eslint-config-next (Next.js 16 rules)</span></pre>
+
+  <div class="highlight">
+    <strong>Test philosophy:</strong> if a function can be tested without a canvas, it should be. The 3D scene construction is the integration layer — tested by eye, not by assertion.
+  </div>
+</div>
+
+<!-- SLIDE 14: Dependency Graph -->
+<div class="slide">
+  <h2>Dependency Graph &amp; Import Boundaries</h2>
+
+  <table>
+    <tr><th>Layer</th><th>Imports from</th><th>Never imports from</th></tr>
+    <tr>
+      <td><code>lib/data/*.ts</code> (editorial)</td>
+      <td>Nothing 3D. Pure content types + data.</td>
+      <td>Any <code>THREE.*</code>, any component, any <code>create*-World</code></td>
+    </tr>
+    <tr>
+      <td><code>lib/store/db.ts</code></td>
+      <td><code>@upstash/redis</code>, <code>node:fs</code>, <code>node:path</code></td>
+      <td>Any React, any component, any 3D module</td>
+    </tr>
+    <tr>
+      <td><code>lib/site.ts</code></td>
+      <td>Nothing (pure constants)</td>
+      <td>Anything — it's the bottom of the dependency graph</td>
+    </tr>
+    <tr>
+      <td><code>lib/places.ts</code>, <code>lib/catalog.ts</code></td>
+      <td><code>lib/types.ts</code>, <code>lib/site.ts</code></td>
+      <td>Components, 3D, DB</td>
+    </tr>
+    <tr>
+      <td><code>components/places/three/diorama-core.ts</code></td>
+      <td><code>three</code> (types + utilities)</td>
+      <td>React, any <code>*-world.ts</code>, any <code>lib/</code></td>
+    </tr>
+    <tr>
+      <td><code>components/places/&lt;name&gt;/&lt;name&gt;-world.ts</code></td>
+      <td><code>three</code>, <code>diorama-core</code>, own <code>lib/data/&lt;name&gt;.ts</code> (optional)</td>
+      <td>React, any other place's world, any <code>app/</code> route</td>
+    </tr>
+    <tr>
+      <td><code>components/places/&lt;name&gt;/&lt;name&gt;-experience.tsx</code></td>
+      <td><code>&lt;name&gt;-world.ts</code>, React, UI components</td>
+      <td>Other places' worlds (except via shared core)</td>
+    </tr>
+    <tr>
+      <td><code>components/places/place-detail.tsx</code></td>
+      <td><code>lib/</code> data, <code>next/dynamic</code>, per-place story modules</td>
+      <td>Nothing that imports from <code>app/</code></td>
+    </tr>
+    <tr>
+      <td><code>app/places/[slug]/page.tsx</code></td>
+      <td><code>lib/</code>, <code>components/places/</code></td>
+      <td>Nothing <code>lib/</code> imports from here — routes are the top of the graph</td>
+    </tr>
+  </table>
+
+  <div class="stat-row">
+    <span class="stat-pill">Bottom: lib/site.ts, lib/data/*.ts</span>
+    <span class="stat-pill">Middle: lib/store/, lib/places/, diorama-core</span>
+    <span class="stat-pill">Top: app/ routes, place-detail, experience</span>
+  </div>
+
+  <p>This layered model keeps the 3D worlds testable and replaceable — you can delete <code>empress-world.ts</code> and the data, story, and route all still compile. You can swap the DB driver without touching any component. You can add a new place by copying a folder and editing the data file — no import-chain surgery.</p>
+</div>
+
+<!-- SLIDE 15: Performance Characteristics -->
+<div class="slide">
+  <h2>Performance Characteristics</h2>
+
+  <div class="two-col">
+    <div>
+      <h3>Bundle &amp; load</h3>
+      <ul>
+        <li><strong>SSR shell:</strong> the server renders the cover, story, stats, etiquette, FAQs — pure HTML + CSS, no JS for the 3D. Fast first paint.</li>
+        <li><strong>3D chunk:</strong> <code>createEmpressWorld</code> and its dependencies are a client bundle loaded via <code>next/dynamic</code>. Only downloaded when the user reaches a place page and the component mounts.</li>
+        <li><strong>three.js:</strong> bundled once (shared across all places). The per-place worlds add layout constants, prop specs, materials, and geometry builders — not a separate three.js for each place.</li>
+        <li><strong>Asset size:</strong> zero external 3D assets. The entire visual world is generated from ~1000 lines of TypeScript per major place — no GLB, no texture download.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Rendering budget</h3>
+      <ul>
+        <li><strong>Empress Garden:</strong> 1 plane (11,660 verts), 36 tree trunks + 108 canopy spheres (instanced), 42 rose blooms + 42 foliage (instanced), 1 greenhouse (box), 6 tents (cones), 4 lamps (cylinder + sprite), 4 benches (box). All in a single <code>WebGLRenderer</code> with <code>PCFSoftShadowMap</code>, <code>ACESFilmicToneMapping</code>, 2048×2048 shadow map.</li>
+        <li><strong>Shadow draw:</strong> one directional light, one shadow camera (80-unit frustum). Trees and greenhouse cast shadows; ground receives.</li>
+        <li><strong>Fog:</strong> distance-based, 150–500 units — hides the edges of the 120×116 ground plane.</li>
+        <li><strong>Pixel ratio cap:</strong> <code>Math.min(devicePixelRatio || 1, 2)</code> — no 3× retina rendering.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <span class="stat-pill"><strong>Zero</strong> external 3D assets</span>
+    <span class="stat-pill"><strong>One</strong> three.js shared bundle</span>
+    <span class="stat-pill"><strong>~12K</strong> vertices in Empress ground plane</span>
+    <span class="stat-pill"><strong>~190</strong> instanced objects (trees + roses + canopy layers)</span>
+    <span class="stat-pill"><strong>3</strong> palettes, switchable at runtime</span>
+    <span class="stat-pill"><strong>0</strong> textures (all material colours + vertex colours)</span>
+  </div>
+
+  <div class="highlight">
+    <strong>Rendering cost model:</strong> the scene is procedurally generated once on mount, then drawn every frame. No per-frame layout rebuild. The most expensive per-frame cost is the shadow map render (2048×2048, one light). On a modern phone this is smooth; on a low-end device, the pixel ratio cap and fog keep it tolerable. The <code>powerPreference: 'high-performance'</code> hint asks the browser for the fast path.
+  </div>
+</div>
+
+<!-- SLIDE 16: Known Limitations & Trade-offs -->
+<div class="slide">
+  <h2>Known Limitations &amp; Trade-offs</h2>
+
+  <table>
+    <tr><th>Area</th><th>Limitation</th><th>Why it's acceptable now</th></tr>
+    <tr>
+      <td>Cross-instance writes</td>
+      <td>The write queue is per-process. Two Vercel function instances can race on <code>mutate()</code>.</td>
+      <td>At this traffic level, the race window is tiny and the data (reviews, suggestions) is non-critical. A real Redis-based queue or Upstash QStash would be the next step if write volume grows.</td>
+    </tr>
+    <tr>
+      <td>Vercel Blob limit</td>
+      <td>A single upload request cannot exceed ~4.5 MB total body on Vercel — so 6 × 4 MB is unreachable.</td>
+      <td>Documented in the route. A client-side <code>upload()</code> from <code>@vercel/blob/client</code> would stream past the function. Not needed until users want to upload larger batches.</td>
+    </tr>
+    <tr>
+      <td>No audio</td>
+      <td>No TTS or ambient audio in the 3D scenes yet.</td>
+      <td>Sarvam TTS integration is a documented next step — the data layer already has Marathi names ready for voice.</td>
+    </tr>
+    <tr>
+      <td>No user accounts</td>
+      <td>Reviews and suggestions are anonymous and stored in the shared DB document. No persistence across sessions (file driver resets on re-deploy; Redis persists but no user identity).</td>
+      <td>Acceptable for a demo. User accounts would need an auth layer (NextAuth, Clerk, or similar) — a medium-term addition.</td>
+    </tr>
+    <tr>
+      <td>No mobile-specific 3D controls</td>
+      <td>OrbitControls works on touch, but there's no two-finger zoom / one-finger orbit distinction tuned for mobile.</td>
+      <td>The scenes work on mobile — touch orbit + scroll zoom function. Fine-tuning would be a polish pass, not a structural change.</td>
+    </tr>
+    <tr>
+      <td>Procedural = stylised</td>
+      <td>The models are clearly "diorama" — not photoreal. Tree canopies are icosahedra, lamp flames are sprites, tents are cones with stripes.</td>
+      <td>This is the design intent: a hand-built diorama feel, not a scan. It matches the editorial tone and keeps the bundle small.</td>
+    </tr>
+    <tr>
+      <td>No sitemap / SEO beyond metadata</td>
+      <td><code>SITE.url</code> is used for metadata, but there's no explicit sitemap.xml generation or structured data beyond the <code>SITE</code> constants.</td>
+      <td>Next.js 16 has sitemap support via <code>sitemap.ts</code> — a small addition. Structured data (Place, TouristAttraction schema) would be a nice-to-have.</td>
+    </tr>
+  </table>
+
+  <div class="highlight">
+    <strong>The one trade-off that matters most:</strong> the procedural approach trades visual realism for author speed and bundle size. Every place is a diorama, not a replica. For a heritage guide aimed at discovery and inspiration, this is the right call — but it's worth stating explicitly.
+  </div>
+</div>
+
+<!-- SLIDE 17: Extension Points -->
+<div class="slide">
+  <h2>Extension Points: How to Add a New Place</h2>
+
+  <p>To add a new place — say, "Shivneri Fort" — you'd follow this path. Each step is isolated; you don't touch any existing place.</p>
+
+  <div class="two-col">
+    <div>
+      <h3>1. Data file (editorial)</h3>
+      <pre><span class="cm">// lib/data/shivneri-fort.ts</span>
+<span class="kw">export type</span> ShivneriFeature = {
+  id: <span class="ty">string</span>; title: <span class="ty">string</span>; marathi: <span class="ty">string</span>;
+  icon: <span class="ty">string</span>; blurb: <span class="ty">string</span>; detail: <span class="ty">string</span>;
+};
+<span class="kw">export const</span> SHIVNERI_FEATURES: ShivneriFeature[] = [ <span class="cm">/* ... */</span> ];
+<span class="kw">export const</span> SHIVNERI_STATS:  ... = [ ... ];
+<span class="kw">export const</span> SHIVNERI_STORY: ... = [ ... ];
+<span class="kw">export const</span> SHIVNERI_ETIQUETTE: ... = [ ... ];
+<span class="kw">export const</span> SHIVNERI_FAQS: ... = [ ... ];</pre>
+    </div>
+    <div>
+      <h3>2. 3D world module</h3>
+      <pre><span class="cm">// components/places/shivneri/shivneri-world.ts</span>
+<span class="kw">import</span> * <span class="kw">as</span> THREE <span class="kw">from</span> <span class="str">'three'</span>;
+<span class="kw">import</span> { ... } <span class="kw">from</span> <span class="str">'@/components/places/three/diorama-core'</span>;
+
+<span class="kw">export type</span> FeatureId = <span class="str">'gate'</span> | <span class="str">'fort-wall'</span> | <span class="str">'shrine'</span> | ...;
+<span class="kw">export type</span> ShivneriWorld = { ... };
+<span class="kw">export function</span> <span class="fn">createShivneriWorld</span>(
+  container: HTMLElement, options: ...
+): ShivneriWorld { <span class="cm">/* layout, terrain, props, lights, camera */</span> }</pre>
+      <p>The world module follows the same shape as every other world — layout constants, zone predicates, <code>buildShivneriLayout(seed)</code>, <code>getShivneriAnchors()</code>, <code>getShivneriHomeView()</code>, palette function, <code>createShivneriWorld()</code> factory. Copy the shape from <code>empress-world.ts</code> and adapt the geometry.</p>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <h3>3. Story / experience components</h3>
+      <pre><span class="cm">// components/places/shivneri/shivneri-story.tsx</span>
+<span class="cm">// Imports SHIVNERI_FEATURES, SHIVNERI_STORY, etc.</span>
+<span class="cm">// Renders the editorial content for place-detail.tsx</span>
+
+<span class="cm">// components/places/shivneri/shivneri-experience.tsx</span>
+<span class="cm">// next/dynamic import of shivneri-world,</span>
+<span class="cm">// canvas container, mode/time-of-day toggles</span>
+<span class="cm">// onSelect/onHover callbacks surface feature UI</span></pre>
+    </div>
+    <div>
+      <h3>4. Register in the catalog</h3>
+      <pre><span class="cm">// lib/catalog.ts — add shivneri to getAllPlaces()</span>
+<span class="cm">// lib/places.ts — add to getSeedPlaces() / getFeaturedPlaces()</span>
+<span class="cm">// lib/types.ts — add to CATEGORY_IDS if a new category is needed</span></pre>
+      <p>The catalog functions return an array of place objects — each with <code>slug</code>, <code>name</code>, <code>category</code>, <code>feature</code> (the 3D experience component), <code>story</code>, <code>cover</code>, etc. Adding a place means adding one entry to that array.</p>
+    </div>
+  </div>
+
+  <div class="highlight">
+    <strong>Time estimate:</strong> a new place with a first-pass 3D world is roughly 1–2 days of work for someone familiar with the codebase — mostly writing geometry. The data file, story, and registration are an afternoon. The test file is 30 minutes if you test the layout/anchor helpers.
+  </div>
+</div>
+
+<!-- SLIDE 18: Deployment Topology -->
+<div class="slide">
+  <h2>Deployment Topology</h2>
+
+  <div class="folder-tree" style="font-size: 13px; line-height: 1.8;">
+<strong>Vercel Production</strong> (explorepune.vercel.app)
+├── Next.js 16 — App Router
+├── SSR: place shell, directory, homepage (HTML + CSS, no 3D JS)
+├── Client bundle: three.js + per-place worlds (loaded on demand)
+├── Upstash Redis — KV_REST_API_URL / KV_REST_API_TOKEN
+│   └── Key: "explorepune:db" → { requests, reviews, views }
+├── Vercel Blob — BLOB_READ_WRITE_TOKEN
+│   └── Public uploads/{timestamp}-{uuid}.{ext}
+├── NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL → SITE.url
+└── Edge: closest to Pune → typically Mumbai / Singapore
+
+<strong>Preview Deployments</strong> (per branch/commit)
+├── NEXT_PUBLIC_VERCEL_URL → SITE.url (self-consistent links)
+├── Same Redis (shared) or unconfigured driver (reads empty, writes error)
+└── Fresh 3D bundles per deploy — no cache staleness
+
+<strong>Local Dev</strong> (next dev, port 3000/3001)
+├── File driver → data/db.json (atomic write/rename)
+├── Local uploads/ → /public/uploads/
+├── No Redis, no Blob — full functionality, no cloud account
+└── SSR off for 3D pages (ssr: false) — same as production
+
+<strong>Self-Host</strong> (next start, any Node host)
+├── Same as local dev — file driver, local uploads
+├── Set NEXT_PUBLIC_SITE_URL for correct metadata
+└── Add Redis credentials to enable persistent writes
+  </div>
+
+  <div class="two-col" style="margin-top: 16px;">
+    <div>
+      <h3>Why Vercel works well here</h3>
+      <ul>
+        <li>Next.js 16 is first-class on Vercel — no custom server, no Dockerfile.</li>
+        <li>Upstash Redis is integrated via Vercel's KV — one credential pair, no separate Redis provisioning.</li>
+        <li>Vercel Blob is integrated the same way — upload token, no S3 bucket wrangling.</li>
+        <li>Preview deployments give every PR a live URL — useful for reviewing a new place's 3D scene before merging.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>What would change for scale</h3>
+      <ul>
+        <li><strong>Redis:</strong> at high write volume, a per-instance write queue isn't enough — move to a Redis-based queue (Upstash QStash, or a Redis list with LPUSH/BRPOP).</li>
+        <li><strong>Blob:</strong> at high upload volume, switch to <code>@vercel/blob/client</code> <code>upload()</code> for streaming past the function body limit.</li>
+        <li><strong>CDN:</strong> the 3D bundles are already served via Vercel's edge — no separate CDN needed until the bundle grows past a few hundred KB.</li>
+        <li><strong>Region:</strong> if the audience shifts outside India, pin the Vercel project to a region closer to the new audience.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 19: Code Quality & Tooling -->
+<div class="slide">
+  <h2>Code Quality &amp; Tooling</h2>
+
+  <table>
+    <tr><th>Tool</th><th>Version</th><th>Configuration</th><th>What it checks</th></tr>
+    <tr><td>TypeScript</td><td>5.x</td><td><code>tsconfig.json</code> — strict: true, esModuleInterop, isolatedModules, jsx: react-jsx, paths: @/* → ./*</td><td>All types across the project. No <code>any</code>-erasure escapes — strict mode enforces it.</td></tr>
+    <tr><td>ESLint</td><td>9.x</td><td><code>eslint</code> + <code>eslint-config-next</code> (Next.js 16 rules)</td><td>Next.js conventions, React hooks rules, unused vars, etc.</td></tr>
+    <tr><td>Vitest</td><td>4.1.8</td><td>Default config — runs <code>*.test.ts</code> files</td><td>Layout helpers, zone predicates, anchor generators, palette functions — all canvas-free.</td></tr>
+    <tr><td>Tailwind 4</td><td>4.x</td><td>CSS-first config via <code>@tailwindcss/postcss</code> — no tailwind.config.js</td><td>Utility classes in components. No custom theme file needed for the current design.</td></tr>
+    <tr><td>Base UI</td><td>1.5.0</td><td><code>@base-ui/react</code> — accessible primitives</td><td>Dialog, select, popover — used where accessible interactions are needed.</td></tr>
+    <tr><td>React Hook Form + Zod</td><td>7.79 + 4.4.3</td><td><code>@hookform/resolvers</code> bridges Zod → RHF</td><td>Type-safe form validation for the request form, review form, admin forms.</td></tr>
+  </table>
+
+  <div class="two-col" style="margin-top: 12px;">
+    <div>
+      <h3>TypeScript strictness in practice</h3>
+      <ul>
+        <li><code>strict: true</code> — strictNullChecks, noImplicitAny, strictFunctionTypes, etc.</li>
+        <li><code>noEmit: true</code> — tsc only checks types, doesn't emit (Next.js/SWC handles emission).</li>
+        <li><code>skipLibCheck: true</code> — don't re-check node_modules (three.js, @vis.gl, etc.)</li>
+        <li><code>isolatedModules: true</code> — each file can be transpiled alone (required by SWC).</li>
+        <li><code>moduleResolution: 'bundler'</code> — matches how Next.js/SWC resolves imports.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>No unresolved type holes</h3>
+      <p>Across the 3D worlds, the <code>THREE.*</code> types are from <code>@types/three</code> (0.180). Buffer attributes are cast with <code>as THREE.BufferAttribute</code> where needed. The <code>track()</code> helper returns the generic <code>T extends { dispose: () => void }</code> — no <code>any</code>.</p>
+      <p>The <code>Database</code> type in <code>db.ts</code> is fully known — <code>requests: PlaceRequest[]</code>, <code>reviews: Review[]</code>, <code>views: Record&lt;string, number&gt;</code>. No <code>any</code> there either.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 20: Summary -->
+<div class="slide">
+  <h2>Architecture Summary</h2>
+
+  <div class="two-col">
+    <div>
+      <h3>What we built</h3>
+      <ul>
+        <li>A Next.js 16 + React 19 web app that guides visitors through Pune's heritage.</li>
+        <li>15 places, each with editorial depth (story, etiquette, FAQs, Marathi names) and a hand-built procedural 3D diorama.</li>
+        <li>A dual-driver data layer (Redis for production, file for dev) with serialised writes and fail-closed behaviour.</li>
+        <li>A file upload API (Vercel Blob or local) for community photos.</li>
+        <li>A per-place component architecture with a shared diorama core — each place is independently addable.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>What makes it technically interesting</h3>
+      <ul>
+        <li><strong>Procedural 3D at scale:</strong> 15 places, zero imported meshes, every vertex generated from TypeScript. This is unusual and cheap to extend.</li>
+        <li><strong>SSR + client island split:</strong> the editorial content is server-rendered; the 3D is a dynamic import that only loads when needed.</li>
+        <li><strong>Deterministic layouts:</strong> seeded PRNG means every world is reproducible — tests can assert on exact prop positions.</li>
+        <li><strong>Environment-driven deployment:</strong> one codebase runs locally, on Vercel preview, and on Vercel production with the right driver for each — no branches, no env-specific code paths beyond the driver selection.</li>
+        <li><strong>Testable 3D:</strong> the parts that matter (layout, anchors, palettes) are pure functions, tested without a canvas.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="stat-row" style="margin-top: 16px;">
+    <span class="stat-pill">Next.js 16 (App Router)</span>
+    <span class="stat-pill">React 19</span>
+    <span class="stat-pill">three.js 0.180</span>
+    <span class="stat-pill">TypeScript strict</span>
+    <span class="stat-pill">Tailwind 4 + Base UI</span>
+    <span class="stat-pill">Vitest</span>
+    <span class="stat-pill">Upstash Redis + Vercel Blob</span>
+    <span class="stat-pill">Vercel deployment</span>
+  </div>
+
+  <div class="highlight" style="margin-top: 20px;">
+    <strong>The core idea, restated:</strong> ExplorePune is a city guide where every place is a diorama you can orbit, zoom, and fly through — built entirely from code, with editorial depth, and deployed for free on Vercel. The technical architecture supports adding more places without an art pipeline, without heavy assets, and without a backend beyond a Redis document store.
+  </div>
+</div>
+
+</body>
+</html>
