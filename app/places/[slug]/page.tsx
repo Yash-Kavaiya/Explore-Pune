@@ -2,13 +2,16 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PlaceDetail } from "@/components/places/place-detail";
 import { getAllPlaces, getPlaceBySlug } from "@/lib/catalog";
-import { getNearbyPlaces, getSeedPlaces } from "@/lib/places";
+import { getNearbyPlaces } from "@/lib/places";
 import { getRatingSummary, listReviews } from "@/lib/store/reviews.repo";
 import { SITE } from "@/lib/site";
 
 export async function generateStaticParams() {
-  return getSeedPlaces().map((p) => ({ slug: p.slug }));
+  const places = await getAllPlaces();
+  return places.map((p) => ({ slug: p.slug }));
 }
+
+export const dynamicParams = true;
 
 // The page body is static, but the reviews on it are not. Without this the
 // build-time snapshot (zero reviews) would be served forever.

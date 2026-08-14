@@ -59,6 +59,12 @@ export async function POST(request: Request) {
   }
 
   const useBlob = Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+  if (!useBlob && process.env.VERCEL) {
+    return NextResponse.json(
+      { error: "Photo uploads are unavailable until a Blob store is connected." },
+      { status: 503 },
+    );
+  }
   if (!useBlob) await fs.mkdir(UPLOAD_DIR, { recursive: true });
 
   const urls: string[] = [];

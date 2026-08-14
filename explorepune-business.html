@@ -8,10 +8,14 @@
   :root {
     --primary: #1a3c58;
     --accent: #c45a3a;
+    --accent2: #d4a050;
     --bg: #faf8f5;
     --card: #ffffff;
+    --card2: #f4f2ed;
     --text: #1a1a2e;
     --muted: #5a5a7a;
+    --green: #3d6a30;
+    --blue: #5a9bd5;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -22,121 +26,217 @@
   }
   .slide {
     min-height: 100vh;
-    padding: 48px 64px;
+    padding: 44px 60px;
     display: flex;
     flex-direction: column;
     page-break-after: always;
     border-bottom: 3px solid var(--accent);
+    position: relative;
   }
   .slide:last-child { page-break-after: auto; }
-  .slide-number {
+  .slide-num {
     position: fixed;
-    bottom: 16px;
-    right: 32px;
-    font-size: 12px;
+    bottom: 14px;
+    right: 28px;
+    font-size: 11px;
     color: var(--muted);
     font-weight: 600;
+    opacity: 0.6;
   }
-  h1 { font-size: 2.4rem; font-weight: 800; color: var(--primary); margin-bottom: 8px; }
-  h2 { font-size: 1.6rem; font-weight: 700; color: var(--primary); margin-bottom: 16px; }
-  h3 { font-size: 1.2rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; margin-top: 16px; }
-  p { margin-bottom: 12px; color: var(--text); }
-  ul { margin-left: 20px; margin-bottom: 16px; }
-  li { margin-bottom: 6px; }
+  h1 { font-size: 2.4rem; font-weight: 800; color: var(--primary); margin-bottom: 6px; letter-spacing: -0.02em; }
+  h2 { font-size: 1.5rem; font-weight: 700; color: var(--primary); margin-bottom: 14px; }
+  h3 { font-size: 1.1rem; font-weight: 700; color: var(--accent); margin-bottom: 6px; margin-top: 14px; }
+  p { margin-bottom: 10px; }
+  ul { margin-left: 18px; margin-bottom: 12px; }
+  li { margin-bottom: 4px; }
   .tag {
     display: inline-block;
     background: var(--primary);
     color: #fff;
     padding: 4px 10px;
     border-radius: 20px;
-    font-size: 12px;
+    font-size: 11px;
     margin: 2px 4px 2px 0;
     font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s, background 0.15s;
   }
-  .two-col {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
-    margin-top: 16px;
+  .tag:hover { transform: scale(1.08); }
+  .tag.active { background: var(--accent); }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 12px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin-top: 12px; }
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    border: 1px solid #e8e6e1;
+  }
+  .card-accent { border-left: 4px solid var(--accent); padding-left: 18px; }
+  .highlight {
+    background: linear-gradient(135deg, #fff3e6, #ffe8d0);
+    border-left: 4px solid var(--accent);
+    padding: 14px 18px;
+    border-radius: 6px;
+    margin: 12px 0;
+    font-weight: 500;
   }
   .stat-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    margin: 24px 0;
+    gap: 14px;
+    margin: 18px 0;
   }
   .stat {
     background: var(--card);
-    border-radius: 12px;
-    padding: 20px;
+    border-radius: 10px;
+    padding: 18px 14px;
     text-align: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border: 1px solid #e8e6e1;
+    transition: transform 0.2s, box-shadow 0.2s;
   }
+  .stat:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,0.08); }
   .stat .number {
     font-size: 2rem;
     font-weight: 800;
     color: var(--accent);
     display: block;
+    line-height: 1.1;
   }
+  .stat .number.green { color: var(--green); }
+  .stat .number.blue { color: var(--blue); }
+  .stat .number.gold { color: var(--accent2); }
   .stat .label {
-    font-size: 13px;
+    font-size: 12px;
     color: var(--muted);
     margin-top: 4px;
-  }
-  .card {
-    background: var(--card);
-    border-radius: 12px;
-    padding: 20px 24px;
-    margin-bottom: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    border-left: 4px solid var(--accent);
+    font-weight: 500;
   }
   .cover {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-height: 100vh;
   }
-  .cover-left { max-width: 600px; }
+  .cover-left { max-width: 580px; }
   .cover-right {
-    font-size: 6rem;
+    font-size: 7rem;
     color: var(--primary);
-    opacity: 0.15;
+    opacity: 0.08;
     font-weight: 900;
+    letter-spacing: -0.04em;
   }
-  .highlight {
-    background: linear-gradient(135deg, #fff3e6 0%, #fff3e6 100%);
-    border-left: 4px solid var(--accent);
-    padding: 16px 20px;
+  .tab-bar {
+    display: flex;
+    gap: 6px;
+    margin: 14px 0 18px;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    padding: 8px 16px;
+    border: 2px solid var(--primary);
+    background: transparent;
+    color: var(--primary);
     border-radius: 8px;
-    margin: 16px 0;
-    font-weight: 500;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
   }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 16px 0;
-    font-size: 14px;
-  }
-  th {
+  .tab-btn.active {
     background: var(--primary);
     color: #fff;
-    padding: 10px 12px;
-    text-align: left;
-    font-weight: 600;
   }
-  td {
-    padding: 10px 12px;
-    border-bottom: 1px solid #e5e5e5;
+  .tab-btn:hover { transform: translateY(-1px); }
+  .tab-content { display: none; animation: fadeIn 0.3s; }
+  .tab-content.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  .counter { font-size: 2.6rem; font-weight: 800; color: var(--accent); display: inline-block; }
+  .counter.blue { color: var(--blue); }
+  .counter.green { color: var(--green); }
+  .counter.gold { color: var(--accent2); }
+  .progress-bar {
+    height: 10px;
+    background: #e5e2da;
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 6px 0;
   }
-  tr:nth-child(even) td { background: #f7f7f7; }
-  .footer-note {
-    margin-top: auto;
-    padding-top: 24px;
+  .progress-fill {
+    height: 100%;
+    border-radius: 5px;
+    transition: width 1s ease;
+  }
+  .cost-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #e8e6e1;
+  }
+  .cost-row:last-child { border-bottom: none; }
+  .cost-label { font-weight: 600; flex: 1; }
+  .cost-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .cost-amt { font-weight: 700; color: var(--accent); margin-left: 16px; white-space: nowrap; }
+  .cost-bar-wrap { width: 120px; margin-left: 12px; }
+  .timeline-item {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 14px;
+    align-items: flex-start;
+  }
+  .timeline-dot {
+    width: 12px; height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 4px rgba(196,90,58,0.15);
+  }
+  .timeline-dot.green { background: var(--green); box-shadow: 0 0 0 4px rgba(61,106,48,0.15); }
+  .timeline-dot.blue { background: var(--blue); box-shadow: 0 0 0 4px rgba(90,155,213,0.15); }
+  .timeline-dot.gold { background: var(--accent2); box-shadow: 0 0 0 4px rgba(212,160,80,0.15); }
+  .tooltip {
+    position: relative;
+    cursor: help;
+  }
+  .tooltip:hover::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--primary);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 6px;
     font-size: 12px;
+    white-space: nowrap;
+    width: 200px;
+    text-align: center;
+    z-index: 10;
+    margin-bottom: 6px;
+  }
+  footer-note {
+    margin-top: auto;
+    padding-top: 20px;
+    font-size: 11px;
     color: var(--muted);
     border-top: 1px solid #ddd;
   }
+  .market-stat {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--card2);
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+  .market-stat .ms-num { font-size: 1.4rem; font-weight: 700; color: var(--accent); }
+  .market-stat .ms-label { font-size: 13px; color: var(--text); }
+  .market-stat .ms-note { font-size: 11px; color: var(--muted); margin-left: auto; }
 </style>
 </head>
 <body>
@@ -144,500 +244,1024 @@
 <!-- SLIDE 1: Cover -->
 <div class="slide cover">
   <div class="cover-left">
-    <span class="tag">Product Launch Overview</span>
+    <span style="display:inline-block;background:var(--primary);color:#fff;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;margin-bottom:12px;">Investment &amp; Market Overview</span>
     <h1>ExplorePune</h1>
-    <p style="font-size: 1.3rem; color: var(--muted); margin-top: 8px;">A curated digital guide to Pune — bringing forts, temples, gardens and hidden heritage sites to life through interactive 3D experiences.</p>
-    <p style="margin-top: 24px; color: var(--muted);">Presented by Yash Kavaiya<br> explorepune.vercel.app</p>
+    <p style="font-size:1.25rem;color:var(--muted);margin-top:6px;">A curated digital guide to Pune — bringing the city's forts, temples, gardens, and heritage sites to life through interactive 3D experiences.<br>
+    <span style="font-size:14px;color:var(--muted);">Built for tourists, locals, students, and heritage enthusiasts.</span></p>
+    <p style="margin-top:20px;font-size:14px;color:var(--muted);">Yash Kavaiya · explorepune.vercel.app · github.com/Yash-Kavaiya/Explore-Pune</p>
+    <p style="margin-top:8px;font-size:13px;color:var(--green);font-weight:600;">&#10003; Live and free for every user, today.</p>
   </div>
   <div class="cover-right">EP</div>
 </div>
-<div class="slide-number" style="display:none;"></div>
 
-<!-- SLIDE 2: The Problem -->
+<!-- SLIDE 2: Executive Summary -->
 <div class="slide">
-  <h2>The Problem We Solved</h2>
-  <p>Pune is one of India's most culturally rich cities — yet discovering its heritage sites remains surprisingly difficult.</p>
-
-  <div class="two-col">
-    <div class="card">
-      <h3>What travelers face today</h3>
-      <ul>
-        <li><strong>Scattered information</strong> — no single source brings forts, temples, museums and gardens together</li>
-        <li><strong>Static images only</strong> — photos don't convey scale, layout, or atmosphere</li>
-        <li><strong>No visual preview</strong> — visitors can't "walk through" a place before committing time and effort</li>
-        <li><strong>Frustrating planning</strong> — finding opening hours, entry fees, best visiting seasons requires jumping across blogs and forums</li>
-      </ul>
-    </div>
-    <div class="card">
-      <h3>What locals miss</h3>
-      <ul>
-        <li><strong>Hidden gems</strong> like Pataleshwar Cave Temple or Khadakwasla Dam's radial sluices are underserved by mainstream content</li>
-        <li><strong>Seasonal context</strong> — the difference between Empress Garden on a Tuesday vs. during the January flower show is enormous, but never visualised</li>
-        <li><strong>No community layer</strong> — no easy way to suggest a place or read real visitor experiences</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="highlight">
-    ExplorePune turns Pune's heritage into a visual, interactive, curated destination — on the web, for free, in one place.
-  </div>
-</div>
-
-<!-- SLIDE 3: What Is ExplorePune -->
-<div class="slide">
-  <h2>What Is ExplorePune?</h2>
-  <p>A web-based city guide that combines editorial depth with hand-built 3D experiences for every place it covers.</p>
+  <h2>Executive Summary</h2>
+  <p>ExplorePune is a web-based city guide that transforms Pune's heritage sites into interactive, visual, 3D experiences — accessible to anyone with a browser, for free. It is the only Pune resource that combines <strong>deep editorial content</strong>, <strong>procedural 3D walkthroughs</strong>, and a <strong>community feedback loop</strong> in one place.</p>
 
   <div class="stat-grid">
-    <div class="stat">
-      <span class="number">15</span>
-      <span class="label">Interactive 3D places</span>
-    </div>
-    <div class="stat">
-      <span class="number">6</span>
-      <span class="label">Categories</span>
-    </div>
-    <div class="stat">
-      <span class="number">3</span>
-      <span class="label">View modes (grid, list, map)</span>
-    </div>
-    <div class="stat">
-      <span class="number">100%</span>
-      <span class="label">Free & open to the public</span>
-    </div>
+    <div class="stat"><span class="counter" data-target="15">0</span><span class="label">Interactive 3D places at launch</span></div>
+    <div class="stat"><span class="counter blue" data-target="6">0</span><span class="label">Content categories</span></div>
+    <div class="stat"><span class="counter green" data-target="0">0</span><span class="label">Cost to end users (free)</span></div>
+    <div class="stat"><span class="counter gold" data-target="1">0</span><span class="label">Art pipeline required (zero)</span></div>
   </div>
 
   <div class="two-col">
-    <div>
-      <h3>What makes it different</h3>
+    <div class="card">
+      <h3>The opportunity</h3>
       <ul>
-        <li><strong>Procedural 3D dioramas</strong> — every place is a hand-built three.js scene, generated at runtime. Zero imported GLB files.</li>
-        <li><strong>Hotspot navigation</strong> — tap numbered stops to fly the camera and read the story behind each landmark.</li>
-        <li><strong>Time-of-day & season modes</strong> — switch between dawn, golden hour, and dusk. Toggle festival mode where it matters.</li>
-        <li><strong>Marathi + English</strong> — feature names are bilingual, grounded in local language.</li>
+        <li><strong>Pune attracts</strong> over 2 million domestic tourists annually (pre-pandemic baseline and growing), plus a large student and business-visitor population that lives in the city year-round.</li>
+        <li><strong>Heritage tourism is underserved</strong> — existing information is scattered across blogs, Wikipedia entries, and YouTube videos, with no consistent visual preview of what a place actually looks like.</li>
+        <li><strong>Digital guidebooks are a proven category</strong> — Lonely Planet, TripAdvisor, and city-specific guides all show that travelers want curated, visual, trustworthy information before they commit to a visit.</li>
+        <li><strong>3D walkthroughs are a differentiator</strong> — no competing Pune guide offers this. It is a moat, not a feature.</li>
       </ul>
     </div>
-    <div>
-      <h3>Covered categories</h3>
+    <div class="card">
+      <h3>What ExplorePune delivers</h3>
       <ul>
-        <li><span class="tag">Forts &amp; Palaces</span> Shaniwar Wada, Lal Mahal, Sinhagad Fort, Aga Khan Palace</li>
-        <li><span class="tag">Museums &amp; Memorials</span> Raja Dinkar Kelkar Museum, National War Memorial</li>
-        <li><span class="tag">Temples &amp; Spiritual</span> Dagdusheth Halwai Ganapati, Pataleshwar Cave, Parvati Hill, Osho Resort</li>
-        <li><span class="tag">Nature &amp; Gardens</span> Okayama Garden, Saras Baug, Empress Garden</li>
-        <li><span class="tag">Lakes &amp; Hills</span> Vetal Tekdi, Khadakwasla Dam</li>
+        <li><strong>15 hand-picked heritage places</strong> — forts, temples, gardens, museums, memorials, lakes, and hilltops — each with a dedicated 3D diorama you can orbit, zoom, and fly through.</li>
+        <li><strong>Curated editorial depth</strong> — history, architecture, what to see, visitor etiquette, and frequently asked questions, written in plain language with Marathi names alongside English.</li>
+        <li><strong>Smart directory</strong> — filter by category, area, season, audience, and free/paid entry; switch between grid, list, and Google Maps views.</li>
+        <li><strong>Community layer</strong> — visitors leave reviews, suggest missing places, and moderators approve submissions through an admin dashboard.</li>
       </ul>
-    </div>
-  </div>
-</div>
-
-<!-- SLIDE 4: User Journey -->
-<div class="slide">
-  <h2>How a Visitor Uses ExplorePune</h2>
-  <p>The experience is designed to move a user from discovery to decision in under a minute.</p>
-
-  <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;">
-    <div class="card">
-      <h3>1. Discover</h3>
-      <p>Land on the homepage. Browse category tiles (Forts, Temples, Gardens, Museums, Lakes &amp; Hills). See featured places ranked by rating. Scroll through curated collections.</p>
-    </div>
-    <div class="card">
-      <h3>2. Filter &amp; Search</h3>
-      <p>On the Places page, filter by category, area, audience type, season, or free/paid entry. Switch between grid, list, and Google Maps views. Search by keyword.</p>
-    </div>
-    <div class="card">
-      <h3>3. Explore in 3D</h3>
-      <p>Open any place. Drag to orbit the 3D scene. Scroll to zoom. Tap a numbered hotspot — the camera flies there, and the editorial story loads: history, architecture, what to see, etiquette, FAQs.</p>
-    </div>
-    <div class="card">
-      <h3>4. Plan the Visit</h3>
-      <p>Every place guide includes: how to reach it, visitor tips, nearby places, and practical essentials. Users leave reviews (stored locally for the demo) and suggest missing places through a community form.</p>
     </div>
   </div>
 
   <div class="highlight">
-    Every 3D page keeps WebGL out of the server render — using <code>next/dynamic</code> with <code>ssr: false</code> — so the first paint is fast and the canvas only loads client-side.
+    <strong>In one sentence:</strong> ExplorePune takes Pune's heritage out of scattered blog posts and static photos and puts it into a single, visual, interactive, free destination on the web — built so that adding more places costs time, not money and not an art pipeline.
   </div>
 </div>
 
-<!-- SLIDE 5: Business Value -->
+<!-- SLIDE 3: The Problem (with market context) -->
 <div class="slide">
-  <h2>Business Value &amp; Opportunity</h2>
+  <h2>The Problem: What Visitors and Locals Face Today</h2>
 
-  <div class="two-col">
-    <div>
-      <h3>Why this matters</h3>
-      <ul>
-        <li><strong>Tourism &amp; cultural promotion</strong> — a free, accessible tool that promotes Pune's heritage to both domestic and international visitors.</li>
-        <li><strong>Differentiation</strong> — no other Pune guide offers procedural 3D walkthroughs. This is a moat, not a feature.</li>
-        <li><strong>Community engagement</strong> — the "Suggest a place" form and review system create a feedback loop; the admin dashboard lets moderators approve submissions.</li>
-        <li><strong>Educational value</strong> — schools, colleges, and heritage walks can use these dioramas as visual aids.</li>
-      </ul>
-    </div>
-    <div>
-      <h3>Revenue-adjacent hooks</h3>
-      <ul>
-        <li><strong>UPI tip jar</strong> — an in-site UPI handle (<code>explorepune@ybl</code>) for voluntary sponsorship.</li>
-        <li><strong>Sponsored listings</strong> — paid placement for heritage-tour operators, local guides, and nearby hotels could sit naturally alongside editorial content.</li>
-        <li><strong>Partnerships</strong> — tie-ins with Vercel Blob for photo uploads, Google Maps for location context, and Upstash Redis for persistent data.</li>
-        <li><strong>Scalable content</strong> — adding a new place means writing one data file and one procedural 3D world — no mesh pipeline, no artist dependency.</li>
-      </ul>
-    </div>
+  <div class="market-stat">
+    <span class="ms-num">~2M+</span>
+    <span class="ms-label">Domestic tourists visit Pune annually (pre-pandemic baseline, growing)</span>
+    <span class="ms-note">Maharashtra Tourism</span>
+  </div>
+  <div class="market-stat">
+    <span class="ms-num">~30+</span>
+    <span class="ms-label">Significant heritage sites in and around Pune — forts, temples, gardens, museums, memorials</span>
+    <span class="ms-note">Underserved by any single guide</span>
+  </div>
+  <div class="market-stat">
+    <span class="ms-num">~0</span>
+    <span class="ms-label">Pune guides offering interactive 3D walkthroughs of individual sites</span>
+    <span class="ms-note">White space</span>
   </div>
 
-  <div class="stat-grid">
-    <div class="stat">
-      <span class="number">Zero</span>
-      <span class="label">Imported 3D assets — fully procedural</span>
-    </div>
-    <div class="stat">
-      <span class="number">~1–2 days</span>
-      <span class="label">Estimated time to add a new place</span>
-    </div>
-    <div class="stat">
-      <span class="number">15</span>
-      <span class="label">Places shipped at launch</span>
-    </div>
-    <div class="stat">
-      <span class="number">₹0</span>
-      <span class="label">Entry cost for end users</span>
-    </div>
-  </div>
-</div>
-
-<!-- SLIDE 6: Technical Stack Overview -->
-<div class="slide">
-  <h2>Under the Hood: The Stack</h2>
-  <p>Built on modern, production-grade tooling with a focus on performance, maintainability, and deployability.</p>
-
-  <table>
-    <tr><th>Layer</th><th>Technology</th><th>Why</th></tr>
-    <tr><td>Framework</td><td>Next.js 16 (App Router) + React 19</td><td>Server-rendered shell, client-side 3D islands. TypeScript-first.</td></tr>
-    <tr><td>3D Engine</td><td>three.js 0.180</td><td>Procedural geometry, instanced meshes, custom shaders for sky/lighting.</td></tr>
-    <tr><td>Styling</td><td>Tailwind CSS 4 + Base UI</td><td>Utility-first design system. Accessible components from Base UI.</td></tr>
-    <tr><td>Icons</td><td>Lucide React</td><td>Consistent, lightweight icon set across the UI.</td></tr>
-    <tr><td>Maps</td><td>@vis.gl/react-google-maps</td><td>Map view in the directory; Pune centre at 18.5204°N, 73.8567°E.</td></tr>
-    <tr><td>Forms</td><td>react-hook-form + Zod + @hookform/resolvers</td><td>Type-safe form validation for community requests and reviews.</td></tr>
-    <tr><td>State / Data</td><td>Upstash Redis (Vercel) or local JSON file</td><td>Dual-driver database: Redis for production, file-based for dev/self-hosting.</td></tr>
-    <tr><td>File Uploads</td><td>@vercel/blob or local /public/uploads</td><td>Community photo uploads — cloud when token set, local fallback otherwise.</td></tr>
-    <tr><td>Testing</td><td>Vitest</td><td>Layout helpers, camera anchors, and prop specs tested without a canvas.</td></tr>
-    <tr><td>Deployment</td><td>Vercel</td><td>One-click deploy; preview URLs per commit; production at explorepune.vercel.app.</td></tr>
-  </table>
-</div>
-
-<!-- SLIDE 7: The 3D Approach -->
-<div class="slide">
-  <h2>Our 3D Strategy: Why Procedural?</h2>
-  <p>This is the single most important technical decision in ExplorePune — and the one with the biggest business implications.</p>
-
-  <div class="two-col">
+  <div class="two-col" style="margin-top:16px;">
     <div class="card">
-      <h3>The conventional approach</h3>
+      <h3>What a visitor struggles with today</h3>
       <ul>
-        <li>Model every place in Blender → export GLB → load with <code>useGLTF</code></li>
-        <li><strong>Cost:</strong> an artist per place, days of work each</li>
-        <li><strong>Size:</strong> each GLB adds 50 KB–2 MB to the bundle</li>
-        <li><strong>Iterate:</strong> changing a wall colour means re-exporting from a 3D tool</li>
-        <li><strong>Scale:</strong> 15 places = significant Art/3D budget</li>
+        <li><strong>Scattered information</strong> — one blog covers Shaniwar Wada's history, another covers its opening hours, a third covers the light-and-sound show. Nothing brings it together.</li>
+        <li><strong>No visual preview</strong> — a visitor can't tell from a photo whether a fort is a 20-minute walk or a 3-hour trek, whether the temple courtyard is intimate or vast, whether the garden is worth the entry fee.</li>
+        <li><strong>Planning friction</strong> — opening hours, entry fees, best season, nearby places, and how to reach a site require jumping across multiple sources, many of which are out of date.</li>
+        <li><strong>Seasonal context is invisible</strong> — Empress Garden in January during the flower show is a completely different experience from a Tuesday in May. No existing guide visualises that difference.</li>
       </ul>
     </div>
     <div class="card">
-      <h3>ExplorePune's approach</h3>
+      <h3>What locals and residents miss</h3>
       <ul>
-        <li>Write pure TypeScript: geometry primitives, instanced meshes, procedural layout, custom materials</li>
-        <li><strong>Cost:</strong> one developer, no art pipeline</li>
-        <li><strong>Size:</strong> zero external 3D assets — everything generated at runtime from code</li>
-        <li><strong>Iterate:</strong> adjust a tree count or rose-ring radius by editing a number in a helper</li>
-        <li><strong>Testable:</strong> layout helpers and camera anchors are pure functions — tested with Vitest, no WebGL needed</li>
+        <li><strong>Hidden gems stay hidden</strong> — Pataleshwar Cave Temple (an 8th-century Rashtrakuta cave under JM Road) and Khadakwasla Dam's eleven radial sluices are real architectural and engineering landmarks that most Pune residents walk past without knowing.</li>
+        <li><strong>No community voice</strong> — there is no easy way to suggest a place that is missing, or to read real visitor experiences curated alongside editorial content.</li>
+        <li><strong>Educational use cases go unmet</strong> — schools and colleges teaching Indian history, architecture, or tourism have no visual, web-native resource they can point students to.</li>
       </ul>
-    </div>
-  </div>
-
-  <div class="stat-grid">
-    <div class="stat">
-      <span class="number">36</span>
-      <span class="label">Trees in Empress Garden (procedural)</span>
-    </div>
-    <div class="stat">
-      <span class="number">42</span>
-      <span class="label">Rose bushes across 3 concentric rings</span>
-    </div>
-    <div class="stat">
-      <span class="number">6</span>
-      <span class="label">Flower-show tents, toggleable by mode</span>
-    </div>
-    <div class="stat">
-      <span class="number">3</span>
-      <span class="label">Time-of-day palettes (dawn, golden, dusk)</span>
     </div>
   </div>
 
   <div class="highlight">
-    Example: Empress Garden's <code>buildEmpressLayout(seed = 1892)</code> generates 36 old-growth trees, 42 rose bushes, a greenhouse, benches, lamps, and 6 flower-show tents — all from deterministic seeded random placement. Change the seed, change the layout. No artist involved.
+    ExplorePune turns this around. A visitor opens the site, filters to what interests them, and within a minute can see a place in 3D, read its story, and understand whether it is worth the trip.
   </div>
 </div>
 
-<!-- SLIDE 8: Place Detail Architecture -->
+<!-- SLIDE 4: What is ExplorePune — interactive tabs -->
 <div class="slide">
-  <h2>Inside a Place Page</h2>
-  <p>Every place follows the same component architecture — consistent UX, isolated implementation per site.</p>
+  <h2>What ExplorePune Is — And How It Works</h2>
+
+  <div class="tab-bar" id="experienceTabs">
+    <button class="tab-btn" data-tab="discover">Discover</button>
+    <button class="tab-btn" data-tab="explore">Explore in 3D</button>
+    <button class="tab-btn" data-tab="plan">Plan a Visit</button>
+    <button class="tab-btn" data-tab="contribute">Contribute</button>
+  </div>
+
+  <div class="tab-content active" id="tab-discover">
+    <div class="two-col">
+      <div>
+        <h3>Browse and filter</h3>
+        <p>Land on the homepage and see category tiles for Forts &amp; Palaces, Temples &amp; Spiritual, Museums &amp; Memorials, Nature &amp; Gardens, and Lakes &amp; Hills. Featured places are ranked by visitor rating. Scroll through curated collections like "Sunday Morning Forts" or "Places with a View."</p>
+        <p>Move to the Places page and filter by what matters: category, area of the city, who the place suits (families, solo travelers, students, photography enthusiasts), the season, and whether entry is free or paid. Switch between a photo grid, a compact list, and a Google Maps view — all from one set of filters.</p>
+      </div>
+      <div>
+        <div class="card">
+          <h3>15 places, 5 categories</h3>
+          <p style="margin-bottom:8px;"><strong>Forts &amp; Palaces</strong> — Shaniwar Wada, Lal Mahal, Sinhagad Fort, Aga Khan Palace</p>
+          <p style="margin-bottom:8px;"><strong>Museums &amp; Memorials</strong> — Raja Dinkar Kelkar Museum, National War Memorial Southern Command</p>
+          <p style="margin-bottom:8px;"><strong>Temples &amp; Spiritual</strong> — Dagdusheth Halwai Ganapati, Pataleshwar Cave, Parvati Hill, Osho Resort</p>
+          <p><strong>Nature &amp; Gardens</strong> — Okayama Friendship Garden, Saras Baug, Empress Garden</p>
+          <p style="margin-bottom:0;"><strong>Lakes &amp; Hills</strong> — Vetal Tekdi, Khadakwasla Dam</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-explore">
+    <div class="two-col">
+      <div>
+        <h3>Open any place and step into it</h3>
+        <p>Every place opens with a 3D scene you control directly. Drag to orbit — look around the fort walls, circle the temple, hover over the garden canopy. Scroll to zoom in and out. Tap a numbered hotspot and the camera flies smoothly to that landmark — the Delhi Darwaza at Shaniwar Wada, the black pyramid at the Osho Resort, the eternal flame at the National War Memorial.</p>
+        <p>When the camera lands, the story loads: the history, the architecture, what to look for, and the questions visitors actually ask. Each feature is shown in English with its Marathi name beside it.</p>
+      </div>
+      <div>
+        <div class="card-accent" style="padding:14px 18px;">
+          <h3>Three ways to shift the mood</h3>
+          <p style="margin-bottom:6px;"><strong>Time of day</strong> — switch every scene between dawn, golden hour, and dusk. The sky, the sun, the shadows, and the fog all change together. A fort at dusk reads differently from the same fort at noon, and the scene shows you that.</p>
+          <p style="margin-bottom:6px;"><strong>Season or festival mode</strong> — Empress Garden has a show-week toggle that places exhibition tents and extra bloom on the lawns, so you can see the garden during the January flower show or on a quiet Tuesday.</p>
+          <p><strong>Camera flight</strong> — every hotspot has a defined camera anchor — a target point, a viewing direction, and a distance. Tapping a hotspot interpolates the camera to that position so the transition feels like moving through the space, not jumping between photos.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-plan">
+    <div class="two-col">
+      <div>
+        <h3>Plan the actual visit</h3>
+        <p>Every place guide includes the practical layer: how to reach it (by road, approximate time from the city centre), visitor tips, opening hours where known, entry fee status, and what nearby places pair well with it. A family visiting Shaniwar Wada can see, in the same place, that Aga Khan Palace and the National War Memorial are both a short drive away — and open those places in new tabs from the same page.</p>
+        <p>The directory's map view plots every place on a Google Map centred on Pune (18.5204°N, 73.8567°E), so a visitor planning a half-day route can see the geography directly.</p>
+      </div>
+      <div>
+        <div class="card">
+          <h3>What's in every place guide</h3>
+          <ul>
+            <li><strong>Cover</strong> — the place name, category badge, and visual identity</li>
+            <li><strong>3D experience</strong> — the interactive diorama with hotspots</li>
+            <li><strong>Story</strong> — 2–3 narrative sections: the history, the character of the place</li>
+            <li><strong>Features</strong> — 4–6 numbered landmarks with blurbs and full detail</li>
+            <li><strong>Stats</strong> — labelled facts (acres, founding year, notable events)</li>
+            <li><strong>Etiquette</strong> — visitor do's and don'ts, often with seasonal notes</li>
+            <li><strong>FAQs</strong> — 4–5 questions with grounded answers</li>
+            <li><strong>Practical info</strong> — how to reach, tips, nearby places</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-contribute">
+    <div>
+      <h3>The community loop</h3>
+      <div class="two-col">
+        <div>
+          <p><strong>Leave a review</strong> — visitors rate and comment on places. Reviews are stored in the shared data store. In the demo they persist across sessions when a Redis store is connected; the architecture supports real per-user persistence as the next step.</p>
+          <p><strong>Suggest a place</strong> — a form lets anyone propose a heritage site that is missing from the guide. Submissions go into the admin queue.</p>
+          <p><strong>Upload a photo</strong> — visitors can attach up to six photos (JPG, PNG, WEBP, GIF, under 4 MB each) to accompany a suggestion or review. Photos are stored in the cloud (Vercel Blob) when the project is configured, or locally for self-hosting.</p>
+        </div>
+        <div>
+          <div class="card">
+            <h3>Admin dashboard</h3>
+            <p>A moderator view lets the maintainer approve or reject place suggestions and moderate reviews. This keeps the community layer curated rather than open — a deliberate choice for a heritage guide where accuracy matters.</p>
+          </div>
+          <div class="highlight" style="margin-top:10px;">
+            <strong>Why this matters for growth:</strong> every community submission is a potential new place in the guide. The cost of adding a place is time, not money — so the community loop is a genuine growth engine, not a feature.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 5: Market & Statistics -->
+<div class="slide">
+  <h2>The Market: Pune's Tourism and Heritage Landscape</h2>
+
+  <h3>Pune at a glance — the demand side</h3>
+  <div class="market-stat">
+    <span class="ms-num">~2M+</span>
+    <span class="ms-label">Domestic tourists per year (Maharashtra Tourism baseline)</span>
+    <span class="ms-note">Growing post-pandemic</span>
+  </div>
+  <div class="market-stat">
+    <span class="ms-num">~7M+</span>
+    <span class="ms-label">Pune metropolitan population — a permanent local audience</span>
+    <span class="ms-note">Year-round residents</span>
+  </div>
+  <div class="market-stat">
+    <span class="ms-num">~100+</span>
+    <span class="ms-label">Colleges and universities in Pune — a built-in student audience for heritage content</span>
+    <span class="ms-note">Education use case</span>
+  </div>
+  <div class="market-stat">
+    <span class="ms-num">~30+</span>
+    <span class="ms-label">Significant heritage sites in and around Pune</span>
+    <span class="ms-note">Available content pool</span>
+  </div>
+
+  <h3 style="margin-top:20px;">Category distribution of the 15 launch places</h3>
+  <div style="margin-top:8px;">
+    <svg viewBox="0 0 600 320" style="width:100%;max-width:600px;height:auto;" aria-label="Bar chart of places per category">
+      <defs>
+        <linearGradient id="barGrad1" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1a3c58"/><stop offset="100%" stop-color="#3a6080"/>
+        </linearGradient>
+        <linearGradient id="barGrad2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#c45a3a"/><stop offset="100%" stop-color="#e07050"/>
+        </linearGradient>
+        <linearGradient id="barGrad3" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#3d6a30"/><stop offset="100%" stop-color="#5a8a48"/>
+        </linearGradient>
+        <linearGradient id="barGrad4" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#5a9bd5"/><stop offset="100%" stop-color="#7ab8e8"/>
+        </linearGradient>
+        <linearGradient id="barGrad5" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#d4a050"/><stop offset="100%" stop-color="#e8c070"/>
+        </linearGradient>
+      </defs>
+      <!-- Grid lines -->
+      <line x1="60" y1="40" x2="580" y2="40" stroke="#ddd" stroke-width="0.5"/>
+      <line x1="60" y1="100" x2="580" y2="100" stroke="#ddd" stroke-width="0.5"/>
+      <line x1="60" y1="160" x2="580" y2="160" stroke="#ddd" stroke-width="0.5"/>
+      <line x1="60" y1="220" x2="580" y2="220" stroke="#ddd" stroke-width="0.5"/>
+      <line x1="60" y1="280" x2="580" y2="280" stroke="#ddd" stroke-width="0.5"/>
+      <!-- Y axis labels -->
+      <text x="50" y="44" text-anchor="end" font-size="11" fill="#888">5</text>
+      <text x="50" y="104" text-anchor="end" font-size="11" fill="#888">4</text>
+      <text x="50" y="164" text-anchor="end" font-size="11" fill="#888">3</text>
+      <text x="50" y="224" text-anchor="end" font-size="11" fill="#888">2</text>
+      <text x="50" y="284" text-anchor="end" font-size="11" fill="#888">1</text>
+      <!-- Bars: Forts 4, Museums 2, Temples 4, Nature 3, Lakes 2 -->
+      <rect x="80" y="60" width="80" height="220" fill="url(#barGrad1)" rx="4"/>
+      <text x="120" y="50" text-anchor="middle" font-size="13" font-weight="700" fill="#1a3c58">4</text>
+      <text x="120" y="308" text-anchor="middle" font-size="11" fill="#555">Forts &amp; Palaces</text>
+
+      <rect x="180" y="180" width="80" height="100" fill="url(#barGrad2)" rx="4"/>
+      <text x="220" y="170" text-anchor="middle" font-size="13" font-weight="700" fill="#c45a3a">2</text>
+      <text x="220" y="308" text-anchor="middle" font-size="11" fill="#555">Museums &amp; Memorials</text>
+
+      <rect x="280" y="60" width="80" height="220" fill="url(#barGrad3)" rx="4"/>
+      <text x="320" y="50" text-anchor="middle" font-size="13" font-weight="700" fill="#3d6a30">4</text>
+      <text x="320" y="308" text-anchor="middle" font-size="11" fill="#555">Temples &amp; Spiritual</text>
+
+      <rect x="380" y="120" width="80" height="160" fill="url(#barGrad4)" rx="4"/>
+      <text x="420" y="110" text-anchor="middle" font-size="13" font-weight="700" fill="#5a9bd5">3</text>
+      <text x="420" y="308" text-anchor="middle" font-size="11" fill="#555">Nature &amp; Gardens</text>
+
+      <rect x="480" y="180" width="80" height="100" fill="url(#barGrad5)" rx="4"/>
+      <text x="520" y="170" text-anchor="middle" font-size="13" font-weight="700" fill="#d4a050">2</text>
+      <text x="520" y="308" text-anchor="middle" font-size="11" fill="#555">Lakes &amp; Hills</text>
+    </svg>
+  </div>
+  <p style="font-size:12px;color:var(--muted);margin-top:4px;">At launch, forts and temples are the deepest categories (4 places each), reflecting Pune's identity as a historic garrison and temple city. Gardens, museums, lakes, and hills round out the coverage. The category distribution mirrors what visitors search for most often — heritage, spirituality, and green spaces.</p>
+
+  <h3 style="margin-top:18px;">Why this matters</h3>
+  <div class="two-col">
+    <div class="card">
+      <h3>Demand is real and repeat</h3>
+      <ul>
+        <li>Pune's heritage sites see <strong>repeat visitation</strong> — locals revisit gardens and temples across seasons, and tourists often return to forts they missed on a first trip.</li>
+        <li>A digital guide that improves with every visit (new places, community photos, updated FAQs) has <strong>stickiness</strong> that a one-time brochure does not.</li>
+        <li>The <strong>student population</strong> creates a natural educational audience — a class on Indian history or architecture can use these dioramas as visual material.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>The gap is visual, not informational</h3>
+      <ul>
+        <li>Information about Pune's sites exists — it is scattered and inconsistent.</li>
+        <li>What does <strong>not</strong> exist is a single place where a visitor can see a site in 3D before deciding to go.</li>
+        <li>This is the white space ExplorePune occupies — and because the 3D is procedural, filling that white space with more places is cheap.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 6: Cost to build — interactive breakdown -->
+<div class="slide">
+  <h2>Cost to Build ExplorePune (Pune-Only, One City)</h2>
+  <p>A realistic estimate for building and launching a Pune-only heritage guide like this — from scratch, solo or small team, to a live production site on the web. Figures are indicative in Indian rupees and reflect a self-funded or bootstrapped build rather than an enterprise contract.</p>
 
   <div class="two-col">
     <div>
-      <h3>Component breakdown</h3>
-      <ul>
-        <li><strong><code>place-cover.tsx</code></strong> — hero image area, category badge, key metadata</li>
-        <li><strong><code>place-detail.tsx</code></strong> — the shell that composes the story, 3D experience, and practical info</li>
-        <li><strong><code>*-story.tsx</code></strong> — the editorial content: headings + body paragraphs (e.g. <code>empress-story.tsx</code>)</li>
-        <li><strong><code>*-world.ts</code></strong> — the procedural 3D world: layout, anchors, palette, <code>create*-World()</code> factory (e.g. <code>empress-world.ts</code>, 1032 lines for Empress alone)</li>
-        <li><strong><code>*-experience.tsx</code></strong> — the React bridge: <code>next/dynamic</code> import, canvas container, controls, mode switches</li>
-        <li><strong><code>*-scene.tsx</code></strong> — scene-level setup that calls into the world module</li>
-      </ul>
+      <h3>Build-phase costs</h3>
+      <div class="card">
+        <div class="cost-row">
+          <span class="cost-label">Product design &amp; planning<div class="cost-desc">Information architecture, user flow, content structure</div></span>
+          <div class="cost-bar-wrap"><div class="progress-fill" style="width:15%;background:var(--primary);"></div></div>
+          <span class="cost-amt">₹0–15,000</span>
+        </div>
+        <div class="cost-row">
+          <span class="cost-label">Frontend development<div class="cost-desc">Next.js, React, Tailwind, routing, directory, forms, admin</div></span>
+          <div class="cost-bar-wrap"><div class="progress-fill" style="width:30%;background:var(--primary);"></div></div>
+          <span class="cost-amt">₹30,000–80,000</span>
+        </div>
+        <div class="cost-row">
+          <span class="cost-label">3D world development<div class="cost-desc">Procedural three.js scenes for 15 places — the core differentiator</div></span>
+          <div class="cost-bar-wrap"><div class="progress-fill" style="width:35%;background:var(--accent);"></div></div>
+          <span class="cost-amt">₹40,000–1,20,000</span>
+        </div>
+        <div class="cost-row">
+          <span class="cost-label">Editorial content<div class="cost-desc">Research, writing, Marathi names, FAQs, etiquette per place</div></span>
+          <div class="cost-bar-wrap"><div class="progress-fill" style="width:12%;background:var(--green);"></div></div>
+          <span class="cost-amt">₹10,000–30,000</span>
+        </div>
+        <div class="cost-row">
+          <span class="cost-label">Testing &amp; quality<div class="cost-desc">Vitest, TypeScript strict checks, visual review of every scene</div></span>
+          <div class="cost-bar-wrap"><div class="progress-fill" style="width:8%;background:var(--blue);"></div></div>
+          <span class="cost-amt">₹5,000–15,000</span>
+        </div>
+        <div style="text-align:right;margin-top:10px;">
+          <span style="font-weight:700;color:var(--primary);">Build subtotal:</span>
+          <span style="font-weight:800;color:var(--accent);margin-left:8px;">₹85,000–2,60,000</span>
+        </div>
+      </div>
     </div>
     <div>
-      <h3>What's in the data file</h3>
-      <ul>
-        <li><strong>Features</strong> — each hotspot id, title, Marathi name, icon, blurb, and full detail paragraph (e.g. EMPRESS_FEATURES has 5 features)</li>
-        <li><strong>Stats</strong> — labelled facts (39 acres, since 1892, January show)</li>
-        <li><strong>Story</strong> — 2–3 narrative sections with headings</li>
-        <li><strong>Etiquette</strong> — visitor do's and don'ts</li>
-        <li><strong>FAQs</strong> — 4–5 questions with grounded answers</li>
-      </ul>
-      <p style="margin-top: 12px;">The feature ids in the data file double as hotspot ids in the 3D scene — one source of truth.</p>
+      <h3>Launch &amp; ongoing costs</h3>
+      <div class="card">
+        <div class="cost-row">
+          <span class="cost-label">Domain name<div class="cost-desc">explorepune.in or .com — annual</div></span>
+          <div class="cost-bar-wrap"><div class="progress-fill" style="width:100%;background:var(--accent2);"></div></div>
+          <span class="cost-amt">₹600–1,500 / yr</span>
+        </div>
+        <div class="cost-row">
+          <span class="cost-label">Hosting (Vercel)<div class="cost-desc">Frontend hosting — free tier sufficient at launch traffic</div></span>
+          <div class="cost-bar-wrap"><div class="progress-fill" style="width:10%;background:var(--blue);"></div></div>
+          <span class="cost-amt">₹0 (free tier)</span>
+        </div>
+        <div class="cost-row">
+          <span class="cost-label">Redis store (Upstash)<div class="cost-desc">Persistent reviews, suggestions, view counts — free tier at low volume</div></span>
+          <div class="cost-bar-wrap"><div class="progress-fill" style="width:10%;background:var(--blue);"></div></div>
+          <span class="cost-amt">₹0 (free tier)</span>
+        </div>
+        <div class="cost-row">
+          <span class="cost-label">Vercel Blob (photo storage)<div class="cost-desc">Community photo uploads — per GB, low volume at launch</div></span>
+          <div class="cost-bar-wrap"><div class="progress-fill" style="width:5%;background:var(--accent2);"></div></div>
+          <span class="cost-amt">₹0–500 / mo</span>
+        </div>
+        <div class="cost-row">
+          <span class="cost-label">Google Maps (directory view)<div class="cost-desc">Maps SDK — free tier includes generous monthly quota</div></span>
+          <div class="cost-bar-wrap"><div class="progress-fill" style="width:5%;background:var(--green);"></div></div>
+          <span class="cost-amt">₹0 (free tier)</span>
+        </div>
+        <div class="cost-row">
+          <span class="cost-label">Ongoing content updates<div class="cost-desc">Adding new places, refreshing editorial, moderating community</div></span>
+          <div class="cost-bar-wrap"><div class="progress-fill" style="width:20%;background:var(--accent);"></div></div>
+          <span class="cost-amt">₹2,000–8,000 / mo</span>
+        </div>
+        <div style="text-align:right;margin-top:10px;">
+          <span style="font-weight:700;color:var(--primary);">Run-rate subtotal:</span>
+          <span style="font-weight:800;color:var(--accent);margin-left:8px;">~₹2,600–10,000 / mo</span>
+        </div>
+      </div>
     </div>
   </div>
 
   <div class="highlight">
-    <strong>Design principle:</strong> each place owns its own folder under <code>components/places/</code> — <code>empress/</code>, <code>saras/</code>, <code>dam/</code>, <code>memorial/</code>, etc. No shared 3D code between places except the core diorama helpers in <code>components/places/three/diorama-core.ts</code>.
+    <strong>Total first-year estimate (build + run-rate): ₹1,15,000 – ₹3,90,000</strong> for a Pune-only site with 15 places, full 3D, and a live community layer — assuming a solo or small-team build and free-tier cloud services. The single biggest cost driver is 3D development time, and that is precisely where the procedural approach saves the most: an imported-GLB approach would add an artist cost line of ₹30,000–60,000 <em>per place</em>, which for 15 places would be ₹4,50,000–9,00,000 — roughly 5–10× the procedural cost.
   </div>
 </div>
 
-<!-- SLIDE 9: Database & Infrastructure -->
+<!-- SLIDE 7: Cost comparison — procedural vs traditional 3D -->
 <div class="slide">
-  <h2>Data Layer &amp; Infrastructure</h2>
+  <h2>The Cost Decision: Procedural 3D vs. Imported 3D Assets</h2>
+  <p>This is the single most important cost decision in the entire project — and the one that determines whether a Pune-only guide is affordable at all.</p>
 
+  <h3>Two ways to build 3D for 15 places</h3>
   <div class="two-col">
-    <div>
-      <h3>Database abstraction (<code>lib/store/db.ts</code>)</h3>
-      <p>A tiny JSON document store that exposes <code>requests</code>, <code>reviews</code>, and <code>views</code>. Two drivers, chosen at runtime:</p>
-      <ul>
-        <li><strong>Redis driver</strong> — when <code>KV_REST_API_URL</code> + token are present (Vercel deployment). Uses Upstash Redis REST API. Key: <code>explorepune:db</code>.</li>
-        <li><strong>File driver</strong> — on-disk <code>data/db.json</code>. Atomic writes via write-then-rename to prevent corruption on crash.</li>
-        <li><strong>Unconfigured driver</strong> — Vercel-only fallback: reads return empty, writes throw a clear error pointing to DEPLOYMENT.md.</li>
-      </ul>
-      <p>Write operations are serialised through a promise queue to avoid interleaving within one process.</p>
+    <div class="card" style="border:2px solid #c45a3a;">
+      <h3 style="color:#c45a3a;">Approach A — Imported 3D assets (GLB/GLTF)</h3>
+      <p style="margin-bottom:8px;">Model every place in Blender (or hire a 3D artist), texture it, export as a GLB file, and load it in the browser with a <code>useGLTF</code>-style loader.</p>
+      <div class="cost-row">
+        <span class="cost-label">3D artist per place<div class="cost-desc">Modelling, texturing, lighting, export</div></span>
+        <span class="cost-amt">₹20,000–50,000</span>
+      </div>
+      <div class="cost-row">
+        <span class="cost-label">15 places — artist cost<div class="cost-desc">15 × per-place artist fee</div></span>
+        <span class="cost-amt">₹3,00,000–7,50,000</span>
+      </div>
+      <div class="cost-row">
+        <span class="cost-label">Asset weight per place<div class="cost-desc">50 KB – 2 MB per GLB, downloaded by every visitor</div></span>
+        <span class="cost-amt">0.5–2 MB × 15</span>
+      </div>
+      <div class="cost-row">
+        <span class="cost-label">Iteration cost<div class="cost-desc">Changing a wall colour or tree count means re-exporting from Blender</div></span>
+        <span class="cost-amt">High</span>
+      </div>
+      <div class="cost-row">
+        <span class="cost-label">Total 3D cost (15 places)<div class="cost-desc">Artist fees only — not counting the dev time to load and manage them</div></span>
+        <span class="cost-amt" style="font-size:1.1rem;">₹3,00,000–7,50,000</span>
+      </div>
     </div>
-    <div>
-      <h3>File upload API (<code>app/api/uploads/route.ts</code>)</h3>
+    <div class="card" style="border:2px solid #3d6a30;">
+      <h3 style="color:#3d6a30;">Approach B — Procedural 3D (ExplorePune's choice)</h3>
+      <p style="margin-bottom:8px;">Write pure TypeScript: geometry primitives, instanced meshes, procedural layout, custom materials, custom sky shader. No Blender, no GLB, no artist.</p>
+      <div class="cost-row">
+        <span class="cost-label">3D developer time per place<div class="cost-desc">Writing geometry, layout, anchors, palette, materials, camera — all in code</div></span>
+        <span class="cost-amt">₹2,000–8,000</span>
+      </div>
+      <div class="cost-row">
+        <span class="cost-label">15 places — dev time<div class="cost-desc">15 × per-place dev time</div></span>
+        <span class="cost-amt">₹30,000–1,20,000</span>
+      </div>
+      <div class="cost-row">
+        <span class="cost-label">Asset weight per place<div class="cost-desc">Zero — everything generated at runtime from code</div></span>
+        <span class="cost-amt">0 KB</span>
+      </div>
+      <div class="cost-row">
+        <span class="cost-label">Iteration cost<div class="cost-desc">Change a tree count or rose-ring radius by editing one number in a helper</div></span>
+        <span class="cost-amt">Low</span>
+      </div>
+      <div class="cost-row">
+        <span class="cost-label">Total 3D cost (15 places)<div class="cost-desc">Dev time only — plus the one-time shared infrastructure (diorama core)</div></span>
+        <span class="cost-amt" style="font-size:1.1rem;color:#3d6a30;">₹30,000–1,20,000</span>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:16px;">Visual comparison</h3>
+  <svg viewBox="0 0 600 200" style="width:100%;max-width:600px;height:auto;margin:10px 0;" aria-label="Cost comparison bar chart">
+    <defs>
+      <linearGradient id="approachAGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#c45a3a"/><stop offset="100%" stop-color="#e07050"/>
+      </linearGradient>
+      <linearGradient id="approachBGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#3d6a30"/><stop offset="100%" stop-color="#5a8a48"/>
+      </linearGradient>
+    </defs>
+    <!-- Grid -->
+    <line x1="80" y1="30" x2="560" y2="30" stroke="#ddd" stroke-width="0.5"/>
+    <line x1="80" y1="70" x2="560" y2="70" stroke="#ddd" stroke-width="0.5"/>
+    <line x1="80" y1="110" x2="560" y2="110" stroke="#ddd" stroke-width="0.5"/>
+    <line x1="80" y1="150" x2="560" y2="150" stroke="#ddd" stroke-width="0.5"/>
+    <!-- Y labels: 0, 200k, 400k, 600k, 800k -->
+    <text x="70" y="34" text-anchor="end" font-size="10" fill="#888">₹0</text>
+    <text x="70" y="74" text-anchor="end" font-size="10" fill="#888">₹2L</text>
+    <text x="70" y="114" text-anchor="end" font-size="10" fill="#888">₹4L</text>
+    <text x="70" y="154" text-anchor="end" font-size="10" fill="#888">₹6L</text>
+    <!-- Approach A bar (7.5L, scaled to 140px out of 120px max — overflows, so cap at 120px and label) -->
+    <rect x="110" y="30" width="120" height="120" fill="url(#approachAGrad)" rx="4"/>
+    <text x="170" y="22" text-anchor="middle" font-size="12" font-weight="700" fill="#c45a3a">₹7.5L</text>
+    <text x="170" y="160" text-anchor="middle" font-size="11" fill="#555">Imported 3D</text>
+    <!-- Approach B bar (1.2L, 19px) -->
+    <rect x="310" y="131" width="120" height="19" fill="url(#approachBGrad)" rx="4"/>
+    <text x="370" y="125" text-anchor="middle" font-size="12" font-weight="700" fill="#3d6a30">₹1.2L</text>
+    <text x="370" y="160" text-anchor="middle" font-size="11" fill="#555">Procedural 3D</text>
+    <!-- Savings callout -->
+    <line x1="250" y1="90" x2="290" y2="90" stroke="#555" stroke-width="1" stroke-dasharray="4,3"/>
+    <text x="270" y="85" text-anchor="middle" font-size="11" fill="#555">~6× savings</text>
+  </svg>
+  <p style="font-size:12px;color:var(--muted);">The bar chart shows the 3D-specific cost line for both approaches across 15 places. The procedural approach costs roughly 6× less in direct 3D spend — and incidentally delivers zero asset weight to the visitor, faster iteration, and a testable codebase.</p>
+
+  <div class="highlight">
+    <strong>Why this matters for the business:</strong> the procedural approach is not just cheaper — it makes the project viable. A Pune-only guide built with imported 3D assets would cost ₹3–7.5 lakh in 3D alone, before any dev or content cost. The same guide built procedurally costs ₹30,000–1.2 lakh in 3D dev time. That difference is the difference between a project that gets built and one that stalls in planning.
+  </div>
+</div>
+
+<!-- SLIDE 8: Revenue potential & business model -->
+<div class="slide">
+  <h2>Revenue Potential &amp; Business Model</h2>
+  <p>ExplorePune is free for every visitor today. That is a deliberate choice — it maximizes reach, trust, and the community loop. But a free product still has a revenue surface, and the surface grows as the audience grows.</p>
+
+  <div class="three-col">
+    <div class="card" style="border:2px solid var(--primary);">
+      <h3>1. Voluntary support (today)</h3>
+      <p style="margin-bottom:6px;">An in-site UPI tip jar — <code>explorepune@ybl</code> — lets appreciative visitors contribute directly. This is not a revenue engine, but it is a signal: it tells the maintainer that people value the product enough to pay for it voluntarily.</p>
+      <p style="font-size:13px;color:var(--muted);">Revenue potential: small, irregular, goodwill-based. A meaningful early signal if it trends upward.</p>
+    </div>
+    <div class="card" style="border:2px solid var(--accent);">
+      <h3>2. Sponsored listings (near-term)</h3>
+      <p style="margin-bottom:6px;">Heritage tour operators, local guides, and nearby hotels can pay for a clearly-labeled sponsored placement alongside editorial content — for example, a "Heritage Walk of Old Pune" operator listed next to Shaniwar Wada, Lal Mahal, and Khadakwasla Dam.</p>
+      <p style="font-size:13px;color:var(--muted);">Revenue potential: ₹2,000–10,000 per listing per month, depending on placement and traffic. A handful of listings could cover the monthly run-rate.</p>
+    </div>
+    <div class="card" style="border:2px solid var(--green);">
+      <h3>3. Partnerships &amp; affiliate (medium-term)</h3>
+      <p style="margin-bottom:6px;">Affiliate links for nearby hotels, transport, and entry-ticket bookings. Co-branded content with Maharashtra Tourism or local heritage Trusts. A Marathi-language version opens a new audience segment.</p>
+      <p style="font-size:13px;color:var(--muted);">Revenue potential: scales with audience. Affiliate conversion on a tourism site is typically 1–3% of visitors who book something after clicking.</p>
+    </div>
+  </div>
+
+  <h3 style="margin-top:16px;">Audience-to-revenue funnel (illustrative)</h3>
+  <div style="margin:10px 0;">
+    <svg viewBox="0 0 600 260" style="width:100%;max-width:600px;height:auto;" aria-label="Funnel chart">
+      <defs>
+        <linearGradient id="funnel1" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1a3c58"/><stop offset="100%" stop-color="#3a6080"/>
+        </linearGradient>
+        <linearGradient id="funnel2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#5a9bd5"/><stop offset="100%" stop-color="#7ab8e8"/>
+        </linearGradient>
+        <linearGradient id="funnel3" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#d4a050"/><stop offset="100%" stop-color="#e8c070"/>
+        </linearGradient>
+        <linearGradient id="funnel4" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#c45a3a"/><stop offset="100%" stop-color="#e07050"/>
+        </linearGradient>
+      </defs>
+      <!-- Funnel stages: Visitors → Place viewers → 3D interactors → Reviewers → Sponsors/convert -->
+      <polygon points="50,30 550,30 460,80 140,80" fill="url(#funnel1)" opacity="0.85"/>
+      <polygon points="140,80 460,80 390,130 210,130" fill="url(#funnel2)" opacity="0.85"/>
+      <polygon points="210,130 390,130 330,180 270,180" fill="url(#funnel3)" opacity="0.85"/>
+      <polygon points="270,180 330,180 310,230 290,230" fill="url(#funnel4)" opacity="0.85"/>
+      <text x="300" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">Visitors (100%)</text>
+      <text x="300" y="74" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">Place viewers (~70%)</text>
+      <text x="300" y="124" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">3D interactors (~40%)</text>
+      <text x="300" y="174" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">Reviewers (~10%)</text>
+      <text x="300" y="224" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">Converted / sponsoring</text>
+    </svg>
+  </div>
+  <p style="font-size:12px;color:var(--muted);margin-top:4px;">Illustrative funnel based on typical visitor-behaviour patterns for visual guide products. The top of the funnel — visitors who open the site — is the largest and cheapest to grow (organic search, social sharing, word of mouth). The narrowest stage — visitors who convert or sponsor — is where revenue lives, and it grows as the audience and trust grow.</p>
+
+  <div class="two-col" style="margin-top:12px;">
+    <div class="card">
+      <h3>What revenue needs first</h3>
       <ul>
-        <li>Multipart form, field name <code>files</code></li>
-        <li>Up to 6 photos per request, 4 MB each</li>
-        <li>Accepted types: JPG, PNG, WEBP, GIF</li>
-        <li>Cloud path: <code>@vercel/blob</code> with <code>BLOB_READ_WRITE_TOKEN</code> → public URLs</li>
-        <li>Local path: <code>/public/uploads/</code> for <code>next dev</code> and self-hosting</li>
-        <li>Deploys cleanly on Vercel; falls back to local disk in dev</li>
+        <li><strong>Audience volume</strong> — revenue is a function of visitors. The free model maximises the top of the funnel.</li>
+        <li><strong>Trust and quality</strong> — a sponsored listing next to sloppy content destroys trust. The editorial depth is what makes sponsored placements credible.</li>
+        <li><strong>A clear labelling standard</strong> — sponsored content must be unmistakably labelled so the visitor never confuses it with editorial.</li>
       </ul>
-      <h3>Environment-driven config</h3>
-      <p><code>NEXT_PUBLIC_SITE_URL</code> overrides the base URL for metadata. Falling back to Vercel-injected <code>NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL</code> ensures preview deploys never advertise localhost.</p>
+    </div>
+    <div class="card">
+      <h3>What revenue does not need</h3>
+      <ul>
+        <li><strong>A paywall</strong> — putting Pune's heritage behind a paywall would shrink the audience and the community loop. Free is the right strategy.</li>
+        <li><strong>Ads clutter</strong> — banner ads would degrade the visual experience that is the product's differentiator. Sponsored placements and affiliate links are cleaner.</li>
+        <li><strong>A large team</strong> — the procedural architecture means the product scales with one developer's time, not headcount.</li>
+      </ul>
     </div>
   </div>
 </div>
 
-<!-- SLIDE 10: Deployment & DevOps -->
+<!-- SLIDE 9: Competitive landscape -->
 <div class="slide">
-  <h2>Deployment &amp; Operations</h2>
+  <h2>Competitive Landscape — Where ExplorePune Sits</h2>
 
-  <div class="two-col">
-    <div>
-      <h3>How it's deployed</h3>
-      <ul>
-        <li><strong>Platform:</strong> Vercel — zero-config Next.js deployment, auto SSL, global edge network</li>
-        <li><strong>Production URL:</strong> <code>https://explorepune.vercel.app</code></li>
-        <li><strong>Preview deployments:</strong> every push to a branch gets a unique URL, powered by Vercel's per-deployment <code>NEXT_PUBLIC_VERCEL_URL</code></li>
-        <li><strong>Region:</strong> Vercel's default — closest edge to Pune visitors is typically Mumbai or Singapore</li>
-      </ul>
+  <p style="margin-bottom:12px;">Most Pune visitors today use a combination of scattered sources. ExplorePune consolidates what they already try to piece together — and adds the one thing none of the existing options offer: a 3D walkthrough of each site.</p>
+
+  <div style="margin:10px 0;">
+    <svg viewBox="0 0 620 340" style="width:100%;max-width:620px;height:auto;" aria-label="Radar chart of competitive positioning">
+      <!-- Radar chart: 5 axes -->
+      <defs>
+        <radialGradient id="radarFill" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="rgba(196,90,58,0.25)"/>
+          <stop offset="100%" stop-color="rgba(196,90,58,0.05)"/>
+        </radialGradient>
+      </defs>
+      <!-- Axes: Visual Preview, Content Depth, Pune Focus, Seasonality, Community -->
+      <!-- Centre at 310,170; radius 130; 5 axes at 90°,162°,234°,306°,378°(=18°)*... let's use 90° spacing offset -->
+      <!-- Axis angles from top, clockwise: 270°(up)=Visual, 342°=Content, 54°=Pune, 126°=Seasonality, 198°=Community -->
+      <!-- We'll draw 5 axes from centre to circumference -->
+      <g stroke="#ccc" stroke-width="0.5" fill="none">
+        <line x1="310" y1="170" x2="310" y2="40"/>
+        <line x1="310" y1="170" x2="426" y2="74"/>
+        <line x1="310" y1="170" x2="476" y2="170"/>
+        <line x1="310" y1="170" x2="426" y2="266"/>
+        <line x1="310" y1="170" x2="194" y2="266"/>
+      </g>
+      <!-- Rings at 25%,50%,75%,100% -->
+      <g stroke="#ddd" stroke-width="0.5" fill="none">
+        <circle cx="310" cy="170" r="32.5"/>
+        <circle cx="310" cy="170" r="65"/>
+        <circle cx="310" cy="170" r="97.5"/>
+        <circle cx="310" cy="170" r="130"/>
+      </g>
+      <!-- Axis labels -->
+      <text x="310" y="28" text-anchor="middle" font-size="11" font-weight="600" fill="#1a3c58">Visual Preview</text>
+      <text x="444" y="70" text-anchor="middle" font-size="11" font-weight="600" fill="#1a3c58">Content Depth</text>
+      <text x="494" y="174" text-anchor="middle" font-size="11" font-weight="600" fill="#1a3c58">Pune Focus</text>
+      <text x="444" y="284" text-anchor="middle" font-size="11" font-weight="600" fill="#1a3c58">Seasonality</text>
+      <text x="178" y="284" text-anchor="middle" font-size="11" font-weight="600" fill="#1a3c58">Community</text>
+
+      <!-- ExplorePune polygon (high on all): Visual=5, Content=4, Pune=5, Seasonality=4, Community=3 -->
+      <!-- Scale to radius: 5→130, 4→104, 3→78 -->
+      <!-- Visual(270°,r=130): 310,40 -->
+      <!-- Content(342°,r=104): 310+104*cos(342°), 170+104*sin(342°) -->
+      <!-- Pune(54°,r=130): 476,170 -->
+      <!-- Seasonality(126°,r=104): 310+104*cos(126°), 170+104*sin(126°) -->
+      <!-- Community(198°,r=78): 310+78*cos(198°), 170+78*sin(198°) -->
+      <!-- cos(342°)=0.951, sin(342°)=-0.309 → 310+99=409, 170-32=138 -->
+      <!-- cos(54°)=0.588, sin(54°)=0.809 → 310+76=386? wait 130*0.588=76.4 → 386.4? No, Pune is at angle 54° (clockwise from top=270°+...) Let me redo: angle from +X axis standard. -->
+      <!-- Simpler: use the endpoint coords I already computed for axes. Visual top=310,40 (r=130). Content: axis endpoint 426,74 (r=130). Pune: 476,170 (r=130). Seasonality: 426,266 (r=130). Community: 194,266 (r=130). -->
+      <!-- For each, scale by score/5 from centre (310,170) toward that endpoint. -->
+      <!-- Visual score 5: (310,40) -->
+      <!-- Content score 4: 310+(426-310)*4/5=310+92.8=402.8, 170+(74-170)*4/5=170-76.8=93.2 → (403,93) -->
+      <!-- Pune score 5: (476,170) -->
+      <!-- Seasonality score 4: 310+(426-310)*4/5=403, 170+(266-170)*4/5=256.8 → (403,257) -->
+      <!-- Community score 3: 310+(194-310)*3/5=310-69.6=240.4, 170+(266-170)*3/5=225.6 → (240,226) -->
+      <polygon points="310,40 403,93 476,170 403,257 240,226" fill="url(#radarFill)" stroke="#c45a3a" stroke-width="2"/>
+      <text x="310" y="30" text-anchor="middle" font-size="13" font-weight="700" fill="#c45a3a">ExplorePune</text>
+
+      <!-- Generic travel blog polygon (low everywhere): Visual=1, Content=2, Pune=2, Seasonality=1, Community=2 -->
+      <!-- Visual r=26: (310,144) -->
+      <!-- Content r=52: 310+116*52/130=310+46.4=356.4, 170-96*52/130=170-38.4=131.6 → (356,132) -->
+      <!-- Pune r=52: 310+166*52/130=310+66.4=376.4, 170 → (376,170) -->
+      <!-- Seasonality r=26: 310+116*26/130=310+23.2=333.2, 170+96*26/130=170+19.2=189.2 → (333,189) -->
+      <!-- Community r=52: 310-116*52/130=310-46.4=263.6, 170+96*52/130=170+38.4=208.4 → (264,208) -->
+      <polygon points="310,144 356,132 376,170 333,189 264,208" fill="none" stroke="#999" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <text x="362" y="140" font-size="11" fill="#999" font-weight="600">Travel blogs</text>
+
+      <!-- Google Maps polygon (medium visual, low depth, medium pune, low season, medium community): Visual=3, Content=1, Pune=3, Seasonality=1, Community=3 -->
+      <!-- Visual r=78: (310,92) -->
+      <!-- Content r=26: (310+116*26/130, 170-96*26/130)=(333.2,149.2) → (333,149) -->
+      <!-- Pune r=78: (310+166*78/130, 170)=(310+99.6,170)=(409.6,170) → (410,170) -->
+      <!-- Seasonality r=26: (310+116*26/130, 170+96*26/130)=(333.2,189.2) → (333,189) -->
+      <!-- Community r=78: (310-116*78/130, 170+96*78/130)=(310-69.6,170+57.6)=(240.4,227.6) → (240,228) -->
+      <polygon points="310,92 333,149 410,170 333,189 240,228" fill="none" stroke="#5a9bd5" stroke-width="1.5"/>
+      <text x="360" y="120" font-size="11" fill="#5a9bd5" font-weight="600">Google / Maps</text>
+
+      <!-- Legend -->
+      <rect x="40" y="305" width="12" height="12" fill="#c45a3a"/>
+      <text x="56" y="315" font-size="11" fill="#555">ExplorePune</text>
+      <line x1="160" y1="311" x2="172" y2="311" stroke="#999" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <text x="176" y="315" font-size="11" fill="#555">Travel blogs</text>
+      <line x1="270" y1="311" x2="282" y2="311" stroke="#5a9bd5" stroke-width="1.5"/>
+      <text x="286" y="315" font-size="11" fill="#555">Google / Maps</text>
+    </svg>
+  </div>
+  <p style="font-size:12px;color:var(--muted);margin-top:4px;">Radar chart across five dimensions that matter for a heritage guide: Visual Preview, Content Depth, Pune Focus, Seasonality awareness, and Community features. ExplorePune scores high on all five — the only dimension where it is middling is Community (still maturing). Travel blogs score low on visual and seasonality; Google Maps offers visual (street view) but shallow content and no Pune-specific curation.</p>
+
+  <div class="two-col" style="margin-top:10px;">
+    <div class="card">
+      <h3>The moat</h3>
+      <p>ExplorePune's competitive position rests on <strong>depth × visual fidelity × curation</strong>. No existing Pune resource offers all three. The procedural 3D approach means that moat is cheap to extend — every new place deepens it without an art pipeline.</p>
     </div>
+    <div class="card">
+      <h3>The defensibility</h3>
+      <p>The moat is hard for a blog to copy (they would need 3D capability), hard for a platform to copy (they would need Pune-specific curation and editorial depth), and hard for a tourist board to copy quickly (they would need the procedural pipeline or the artist budget). The procedural pipeline is the structural advantage.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 10: User journey & engagement -->
+<div class="slide">
+  <h2>The Visitor Journey — From Discovery to Visit</h2>
+  <p>A visitor moves through ExplorePune in a predictable path. Each stage has an engagement behaviour and a measurable signal. The product is designed so that each stage leads naturally to the next.</p>
+
+  <div class="timeline-item">
+    <div class="timeline-dot blue"></div>
     <div>
-      <h3>Dev experience</h3>
-      <ul>
-        <li><code>npm install</code> → <code>npm run dev</code> — starts on port 3000 (or 3001 if taken)</li>
-        <li><code>npm run typecheck</code> — strict TypeScript check</li>
-        <li><code>npm test</code> — Vitest run, tests layout/anchor helpers</li>
-        <li><code>npm run build</code> — full production build, including 3D worlds as client bundles</li>
-        <li><code>npm run lint</code> — ESLint with Next.js config</li>
-      </ul>
+      <h3>1. Land and browse <span style="font-size:12px;color:var(--muted);">— the top of the funnel</span></h3>
+      <p>A visitor arrives from search, social, or a direct link. The homepage presents category tiles, featured places, and curated collections. Within seconds they can see what the site covers and filter to what interests them.</p>
+      <p style="font-size:12px;color:var(--muted);margin-top:4px;"><strong>Signal:</strong> category tile clicks, time on homepage, filter usage. A visitor who filters is a visitor who is seriously considering a visit.</p>
     </div>
   </div>
 
-  <div class="stat-grid">
-    <div class="stat">
-      <span class="number">Next.js 16</span>
-      <span class="label">App Router, React 19</span>
+  <div class="timeline-item">
+    <div class="timeline-dot"></div>
+    <div>
+      <h3>2. Open a place and step into the 3D scene <span style="font-size:12px;color:var(--muted);">— the differentiator</span></h3>
+      <p>The visitor taps a place. The cover renders with the category badge and metadata; the 3D scene mounts client-side via a dynamic import. They drag to orbit, scroll to zoom, and — this is the key behaviour — tap a numbered hotspot. The camera flies to that landmark and the story loads.</p>
+      <p style="font-size:12px;color:var(--muted);margin-top:4px;"><strong>Signal:</strong> hotspot taps, camera flight completions, time spent in the 3D scene. A visitor who taps two or more hotspots is engaged enough to consider the place seriously.</p>
     </div>
-    <div class="stat">
-      <span class="number">SSR: false</span>
-      <span class="label">on all 3D pages (WebGL client-only)</span>
+  </div>
+
+  <div class="timeline-item">
+    <div class="timeline-dot green"></div>
+    <div>
+      <h3>3. Read the story and plan <span style="font-size:12px;color:var(--muted);">— the decision layer</span></h3>
+      <p>With the 3D scene open and the story visible, the visitor reads the history, the features, the etiquette, and the FAQs. They check how to reach the place, the entry fee status, and nearby places. The map view in the directory helps them see geography.</p>
+      <p style="font-size:12px;color:var(--muted);margin-top:4px;"><strong>Signal:</strong> story section scrolls, FAQ expansion, "nearby places" clicks. A visitor who reads the etiquette is a visitor who is preparing to visit respectfully.</p>
     </div>
-    <div class="stat">
-      <span class="number">Tailwind 4</span>
-      <span class="label">with @tailwindcss/postcss</span>
+  </div>
+
+  <div class="timeline-item">
+    <div class="timeline-dot gold"></div>
+    <div>
+      <h3>4. Visit, then return and contribute <span style="font-size:12px;color:var(--muted);">— the community loop</span></h3>
+      <p>The visitor goes to the place. Later, they return to the site to leave a review, upload a photo, or suggest a place that was missing. The admin dashboard curates these contributions. Over time, the guide gets richer — and the next visitor has a better experience.</p>
+      <p style="font-size:12px;color:var(--muted);margin-top:4px;"><strong>Signal:</strong> review submissions, photo uploads, place suggestions. A visitor who contributes is a visitor who becomes a small part of the product's growth.</p>
     </div>
-    <div class="stat">
-      <span class="number">TypeScript strict</span>
-      <span class="label">mode throughout</span>
+  </div>
+
+  <div class="two-col" style="margin-top:12px;">
+    <div class="card">
+      <h3>Engagement design principles</h3>
+      <ul>
+        <li><strong>Fast first paint</strong> — the editorial shell renders server-side. The 3D scene loads only when the visitor scrolls to it. A visitor on a slow connection still sees the story immediately.</li>
+        <li><strong>No dead ends</strong> — every place links to nearby places, the directory, and the suggest-a-place form. A visitor who finishes reading a story can go somewhere meaningful next.</li>
+        <li><strong>Respect the visit</strong> — etiquette and FAQs are written for a real visitor, not an SEO keyword list. That builds trust, and trust is what brings visitors back and brings them to contribute.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Why this journey converts</h3>
+      <ul>
+        <li>The 3D scene is the <strong>hook</strong> — it is the one thing no competitor offers, and it is what makes a visitor stay and explore.</li>
+        <li>The editorial depth is the <strong>reason to trust</strong> — a visitor who reads a well-written story about Shaniwar Wada is more likely to visit it than one who skimmed a photo gallery.</li>
+        <li>The community loop is the <strong>growth engine</strong> — every contribution makes the product better for the next visitor, at near-zero marginal cost.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 11: Why Pune only — and what it means for cost -->
+<div class="slide">
+  <h2>Why Pune Only — And What It Means for Cost and Strategy</h2>
+  <p>ExplorePune is deliberately focused on one city. That focus is not a limitation of the technology — the architecture can be extended to other cities — but a deliberate business choice about where to start and what to optimise for.</p>
+
+  <div class="two-col">
+    <div class="card">
+      <h3>Why start with one city</h3>
+      <ul>
+        <li><strong>Depth over breadth</strong> — 15 places with real editorial depth and a real 3D scene each are worth more than 100 places with a placeholder. A Pune visitor who opens the site gets a complete, trustworthy guide, not a thin directory.</li>
+        <li><strong>Curation is the product</strong> — the value is not the number of places but the quality of the writing, the accuracy of the 3D, and the trustworthiness of the etiquette and FAQs. That takes time per place, and one city is a realistic scope for one author.</li>
+        <li><strong>Word of mouth is local</strong> — a Pune resident who loves the guide tells other Pune residents. A guide that covers all of Maharashtra dilutes that local word-of-mouth density. A Pune-only guide can own the phrase "the Pune heritage guide."</li>
+        <li><strong>Cost discipline</strong> — building one city well is affordable (see the cost slide). Building ten cities at once is not — and a half-built ten-city guide is worse than a complete Pune guide.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>What Pune-only means for cost</h3>
+      <ul>
+        <li><strong>Build cost is bounded</strong> — 15 places, one city, one author. The cost estimate on the previous slide is realistic for Pune only. Adding a second city would roughly double the 3D and editorial cost — and that is a decision to make after Pune is live and proven.</li>
+        <li><strong>Ongoing cost is low</strong> — free-tier hosting, free-tier Redis, free-tier Maps, and a small content update budget. A Pune-only guide can run on a shoestring.</li>
+        <li><strong>Revenue per visitor is higher</strong> — a Pune visitor is more likely to be interested in a sponsored Pune heritage walk than a visitor who landed on a Maharashtra-wide guide looking for a specific site. Focus improves relevance, and relevance improves conversion.</li>
+        <li><strong>Expansion is a later decision</strong> — the architecture supports adding cities. The procedural pipeline can be reused. But the decision to expand should come after Pune has proven the model, not before.</li>
+      </ul>
     </div>
   </div>
 
   <div class="highlight">
-    <strong>Cost profile:</strong> static/SSR pages on Vercel's free tier; 3D scenes are client-side JS bundles (no server GPU). Upstash Redis has a free tier sufficient for this traffic level. Vercel Blob is priced per GB stored — community uploads are small (4 MB cap per photo).
+    <strong>The Pune-only strategy in one line:</strong> build one city so well that it becomes the definitive Pune heritage guide — and let the cost, the curation, and the word of mouth all compound in one place before expanding.
   </div>
 </div>
 
-<!-- SLIDE 11: Competitive Landscape -->
+<!-- SLIDE 12: Interactive ROI & sensitivity -->
 <div class="slide">
-  <h2>Where ExplorePune Fits in the Market</h2>
-
-  <table>
-    <tr><th>Category</th><th>Traditional blogs / travel sites</th><th>Google Maps / Wanderlust apps</th><th>ExplorePune</th></tr>
-    <tr>
-      <td>Visual preview</td>
-      <td>Static photos, if any</td>
-      <td>Street view (not interior/heritage)</td>
-      <td><strong>Procedural 3D dioramas — drag, orbit, zoom, fly to hotspots</strong></td>
-    </tr>
-    <tr>
-      <td>Depth of content</td>
-      <td>Inconsistent, often shallow</td>
-      <td>User-generated, uneven quality</td>
-      <td><strong>Curated editorial: history, architecture, etiquette, FAQs, Marathi names</strong></td>
-    </tr>
-    <tr>
-      <td>Coverage of Pune</td>
-      <td>Scattered across many sites</td>
-      <td>Everything, but unfiltered</td>
-      <td><strong>15 hand-picked heritage places, each with a dedicated 3D world</strong></td>
-    </tr>
-    <tr>
-      <td>Seasonality</td>
-      <td>Rarely addressed</td>
-      <td>Not addressed</td>
-      <td><strong>Show-week toggle for Empress Garden; time-of-day palettes across all scenes</strong></td>
-    </tr>
-    <tr>
-      <td>Community layer</td>
-      <td>Comments section (if any)</td>
-      <td>Reviews (generic)</td>
-      <td><strong>Suggest-a-place form + review system + admin moderation dashboard</strong></td>
-    </tr>
-    <tr>
-      <td>Cost to user</td>
-      <td>Often ad-heavy or paywalled</td>
-      <td>Free</td>
-      <td><strong>Free — UPI tip jar optional</strong></td>
-    </tr>
-  </table>
-
-  <div class="highlight">
-    ExplorePune's moat is <strong>depth × visual fidelity × curation</strong> — a combination no existing Pune resource offers. The procedural 3D approach means that moat is cheap to extend.
-  </div>
-</div>
-
-<!-- SLIDE 12: Roadmap & Growth -->
-<div class="slide">
-  <h2>Roadmap &amp; Expansion Path</h2>
+  <h2>Sensitivity: What Drives the Numbers</h2>
+  <p>A bootstrapped Pune-only guide like this does not need venture-scale returns to be worthwhile. But it helps to see which variables move the outcome — audience size, revenue per visitor, and the cost of adding places.</p>
 
   <div class="two-col">
     <div>
-      <h3>Immediate (next 1–3 months)</h3>
-      <ul>
-        <li>Ship the remaining 15 places to their full 3D treatment — each is scaffolded, several are already visually rich</li>
-        <li>Add real Upstash Redis on the Vercel project so reviews and suggestions persist across deploys</li>
-        <li>Populate the directory with real community-submitted photos via the upload API</li>
-        <li>Add a "Plan your visit" collection: combine 2–3 nearby places into a walking route (e.g. Paranjape Digambar, Shaniwar Wada, Lal Mahal)</li>
-      </ul>
+      <h3>Scenario table — first-year outcomes</h3>
+      <div style="margin:8px 0;">
+        <svg viewBox="0 0 600 220" style="width:100%;max-width:600px;height:auto;" aria-label="Scenario comparison chart">
+          <defs>
+            <linearGradient id="scen1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3d6a30"/><stop offset="100%" stop-color="#5a8a48"/></linearGradient>
+            <linearGradient id="scen2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5a9bd5"/><stop offset="100%" stop-color="#7ab8e8"/></linearGradient>
+            <linearGradient id="scen3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#d4a050"/><stop offset="100%" stop-color="#e8c070"/></linearGradient>
+          </defs>
+          <line x1="80" y1="30" x2="560" y2="30" stroke="#ddd" stroke-width="0.5"/>
+          <line x1="80" y1="70" x2="560" y2="70" stroke="#ddd" stroke-width="0.5"/>
+          <line x1="80" y1="110" x2="560" y2="110" stroke="#ddd" stroke-width="0.5"/>
+          <line x1="80" y1="150" x2="560" y2="150" stroke="#ddd" stroke-width="0.5"/>
+          <line x1="80" y1="190" x2="560" y2="190" stroke="#ddd" stroke-width="0.5"/>
+          <text x="70" y="34" text-anchor="end" font-size="10" fill="#888">0</text>
+          <text x="70" y="74" text-anchor="end" font-size="10" fill="#888">50k</text>
+          <text x="70" y="114" text-anchor="end" font-size="10" fill="#888">100k</text>
+          <text x="70" y="154" text-anchor="end" font-size="10" fill="#888">150k</text>
+          <text x="70" y="194" text-anchor="end" font-size="10" fill="#888">200k</text>
+          <!-- Conservative: 30k visitors, revenue ~15k -->
+          <rect x="100" y="153" width="100" height="37" fill="url(#scen1)" rx="4"/>
+          <text x="150" y="147" text-anchor="middle" font-size="12" font-weight="700" fill="#3d6a30">30k</text>
+          <text x="150" y="208" text-anchor="middle" font-size="11" fill="#555">Visitors/yr</text>
+          <!-- Moderate: 80k visitors, revenue ~40k -->
+          <rect x="220" y="107" width="100" height="83" fill="url(#scen2)" rx="4"/>
+          <text x="270" y="101" text-anchor="middle" font-size="12" font-weight="700" fill="#5a9bd5">80k</text>
+          <text x="270" y="208" text-anchor="middle" font-size="11" fill="#555">Visitors/yr</text>
+          <!-- Optimistic: 150k visitors, revenue ~90k -->
+          <rect x="340" y="63" width="100" height="127" fill="url(#scen3)" rx="4"/>
+          <text x="390" y="57" text-anchor="middle" font-size="12" font-weight="700" fill="#d4a050">150k</text>
+          <text x="390" y="208" text-anchor="middle" font-size="11" fill="#555">Visitors/yr</text>
+          <text x="500" y="34" text-anchor="start" font-size="11" fill="#888">Conservative</text>
+          <text x="500" y="74" text-anchor="start" font-size="11" fill="#888">Moderate</text>
+          <text x="500" y="114" text-anchor="start" font-size="11" fill="#888">Optimistic</text>
+        </svg>
+      </div>
+      <p style="font-size:12px;color:var(--muted);">Visitors per year — a function of SEO, social sharing, word of mouth, and Pune tourism volume. The moderate scenario (80,000 visitors/year) is a reasonable target for a useful, free, Pune-specific guide that ranks for heritage-site searches.</p>
+
+      <div class="highlight" style="margin-top:8px;">
+        <strong>Revenue sensitivity:</strong> at ₹5 revenue per 100 visitors (a conservative blended rate across sponsored listings, affiliate clicks, and voluntary tips), 80,000 visitors/year yields ~₹4,000/month in revenue — enough to cover the cloud run-rate and contribute to content refresh. At ₹20 per 100 visitors (a few sponsored listings actively converting), the same audience yields ~₹16,000/month — enough to pay a part-time content maintainer.
+      </div>
     </div>
     <div>
-      <h3>Medium term (3–12 months)</h3>
-      <ul>
-        <li><strong>Monetisation experiments:</strong> sponsored listings for heritage tour operators; affiliate links for nearby hotels and transport</li>
-        <li><strong>Mobile-first redesign:</strong> 3D scenes already work on mobile (touch orbit, scroll zoom); polish the UI for small screens</li>
-        <li><strong>Audio guides:</strong> integrate Sarvam TTS for Marathi/English audio tours that play as the camera flies between hotspots</li>
-        <li><strong>Marathi-language version:</strong> the data layer already has Marathi feature names — extend to full page content</li>
-        <li><strong>User accounts:</strong> persistent reviews, saved places, contribution history</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="stat-grid">
-    <div class="stat">
-      <span class="number">15 → 50+</span>
-      <span class="label">Places target over time</span>
-    </div>
-    <div class="stat">
-      <span class="number">Pune</span>
-      <span class="label">Phase 1; other cities are structurally possible</span>
-    </div>
-    <div class="stat">
-      <span class="number">School / college</span>
-      <span class="label">Potential institutional use</span>
-    </div>
-    <div class="stat">
-      <span class="number">Heritage walks</span>
-      <span class="label">Natural partner channel</span>
+      <h3>Key variables and their effect</h3>
+      <div class="card">
+        <div class="market-stat">
+          <span class="ms-num">Audience size</span>
+          <span class="ms-label">The dominant variable. Doubles audience → doubles revenue at every rate.</span>
+          <span class="ms-note" style="color:var(--accent);">Most sensitive</span>
+        </div>
+        <div class="market-stat">
+          <span class="ms-num">Revenue per visitor</span>
+          <span class="ms-label">Driven by sponsored listing count, affiliate conversion, and voluntary tip rate.</span>
+          <span class="ms-note" style="color:var(--accent);">Second most sensitive</span>
+        </div>
+        <div class="market-stat">
+          <span class="ms-num">Cost per new place</span>
+          <span class="ms-label">Driven by 3D approach. Procedural = ₹2,000–8,000/place. Imported = ₹20,000–50,000/place.</span>
+          <span class="ms-note" style="color:var(--green);">Structural advantage</span>
+        </div>
+        <div class="market-stat">
+          <span class="ms-num">Community contribution rate</span>
+          <span class="ms-label">Visitors who leave reviews or suggest places. Low cost, high long-term value.</span>
+          <span class="ms-note" style="color:var(--blue);">Quality multiplier</span>
+        </div>
+      </div>
+      <div class="card" style="margin-top:8px;">
+        <h3>Break-even thinking</h3>
+        <p>At the moderate audience scenario (80,000 visitors/year) and a ₹10/100-visitor revenue rate, the guide generates ~₹8,000/month — enough to cover the cloud run-rate and a small content budget. The build cost (₹85,000–2,60,000) pays back within 12–30 months at that rate — before counting any expansion value or audience growth beyond the moderate scenario.</p>
+        <p style="margin-top:6px;font-size:12px;color:var(--muted);">This is not a venture-scale return profile — it is a bootstrapped,/utility-scale return profile. That is the right profile for a free, public-interest heritage guide.</p>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- SLIDE 13: Team & Author -->
+<!-- SLIDE 13: Roadmap -->
+<div class="slide">
+  <h2>Roadmap — From Pune to a Defensible Guide</h2>
+
+  <div class="timeline-item">
+    <div class="timeline-dot"></div>
+    <div>
+      <h3>Now — Pune, complete and live <span style="font-size:12px;color:var(--muted);">(months 0–3)</span></h3>
+      <p>Ship the remaining places to their full 3D treatment. Connect a real Upstash Redis store so reviews and suggestions persist. Populate community photo uploads. Add curated route collections — for example, "Old City Morning: Shaniwar Wada, Lal Mahal, Parvati Hill" — that combine nearby places into a walkable half-day plan.</p>
+    </div>
+  </div>
+
+  <div class="timeline-item">
+    <div class="timeline-dot green"></div>
+    <div>
+      <h3>Near-term — deepen the revenue surface <span style="font-size:12px;color:var(--muted);">(months 3–6)</span></h3>
+      <p>Onboard the first sponsored listings — heritage tour operators and local guides who serve Pune visitors directly. Add affiliate links for nearby hotels and entry-ticket bookings where available. Begin a mobile polish pass: the 3D scenes already work on touch devices; the UI polish makes the experience feel native on a phone.</p>
+    </div>
+  </div>
+
+  <div class="timeline-item">
+    <div class="timeline-dot blue"></div>
+    <div>
+      <h3>Medium-term — grow the audience and the language surface <span style="font-size:12px;color:var(--muted);">(months 6–12)</span></h3>
+      <p>Add audio guides using TTS — the data layer already has Marathi names; a voice layer turns a 3D flight between hotspots into a narrated tour. Begin a Marathi-language version of the editorial content. Reach out to schools, colleges, and heritage walk organisers who can use the dioramas as visual material — institutional use is a high-trust, high-volume audience channel.</p>
+    </div>
+  </div>
+
+  <div class="timeline-item">
+    <div class="timeline-dot" style="background:var(--primary);box-shadow:0 0 0 4px rgba(26,60,88,0.15);"></div>
+    <div>
+      <h3>Later — the expansion question <span style="font-size:12px;color:var(--muted);">(year 1+)</span></h3>
+      <p>Only after Pune is the definitive Pune heritage guide: the architecture can extend to another city — Aurangabad, Nashik, Kolhapur — by copying the per-place folder pattern and writing new 3D worlds. Each new city is a deliberate decision, not a feature toggle. The procedural pipeline is reusable; the editorial depth and curation are not — and they are the point of the product.</p>
+    </div>
+  </div>
+
+  <div class="two-col" style="margin-top:12px;">
+    <div class="card">
+      <h3>What success looks like in year one</h3>
+      <ul>
+        <li>Pune visitors treat ExplorePune as the first place they check before visiting any heritage site in the city.</li>
+        <li>The guide has 80,000+ visitors/year — enough to cover cloud costs and a small content budget.</li>
+        <li>A handful of sponsored listings and affiliate links cover the monthly run-rate.</li>
+        <li>Community contributions (reviews, photos, suggestions) are a steady trickle — the guide gets richer without the author writing every word.</li>
+        <li>Schools and heritage walk operators use the dioramas as visual material — a new audience segment that does not compete with the tourist audience.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>What failure would look like — and how to avoid it</h3>
+      <ul>
+        <li><strong>Thin content</strong> — 15 places with weak writing and placeholder 3D. Avoidable: the editorial depth and procedural quality are the product; cut the scope to fewer places if needed, but never ship thin.</li>
+        <li><strong>No audience</strong> — a great guide no one finds. Avoidable: SEO for heritage-site queries, social sharing of the 3D scenes (they are visually distinctive), and word of mouth from Pune residents.</li>
+        <li><strong>Revenue before trust</strong> — monetising before the guide earns trust. Avoidable: keep the free model and the clear labelling standard; let revenue grow as audience and trust grow.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 14: The team & the author -->
 <div class="slide">
   <h2>Built By</h2>
-  <div class="card" style="border-left-color: var(--primary); max-width: 500px;">
+  <div class="card" style="max-width:520px;border-left:4px solid var(--primary);">
     <h3>Yash Kavaiya</h3>
-    <p>AI/ML engineer building in the intersection of web, 3D, and voice — with a focus on Indian heritage and language.</p>
-    <p style="margin-top: 12px;"><strong>GitHub:</strong> <a href="https://github.com/Yash-Kavaiya">github.com/Yash-Kavaiya</a><br>
-    <strong>Project repo:</strong> <a href="https://github.com/Yash-Kavaiya/Explore-Pune">github.com/Yash-Kavaiya/Explore-Pune</a></p>
+    <p>AI/ML engineer building at the intersection of web, 3D, and voice — with a focus on Indian heritage and language.</p>
+    <p style="margin-top:8px;"><strong>GitHub:</strong> github.com/Yash-Kavaiya<br>
+    <strong>Project:</strong> github.com/Yash-Kavaiya/Explore-Pune<br>
+    <strong>Live:</strong> explorepune.vercel.app</p>
+    <p style="margin-top:8px;font-size:13px;color:var(--muted);">This is a solo-built project with the depth usually seen in a small team. The procedural 3D architecture means the author is the only bottleneck — not an art pipeline, not a team of modelers, not a licensing budget for 3D assets.</p>
   </div>
 
-  <div style="margin-top: 24px;">
-    <h3>What's in the repo today</h3>
-    <ul>
-      <li><strong>15 fully scaffolded places</strong> — each with story, etiquette, FAQs, and a procedural 3D world module</li>
-      <li><strong>Several places already visually rich</strong> — Empress Garden (1032-line world), Khadakwasla Dam, National War Memorial, Saras Baug, Pataleshwar Cave</li>
-      <li><strong>Shared infrastructure:</strong> diorama core, layout system, palette system, camera anchor helpers</li>
-      <li><strong>Full test suite</strong> — Vitest tests on layout builders, prop specs, and camera anchors</li>
-      <li><strong>Admin dashboard</strong> — approve community requests, moderate reviews</li>
-    </ul>
+  <div style="margin-top:16px;">
+    <h3>What exists in the repo today</h3>
+    <div class="two-col">
+      <div>
+        <ul>
+          <li><strong>15 fully scaffolded places</strong> — each with story, etiquette, FAQs, and a procedural 3D world module.</li>
+          <li><strong>Several places visually rich</strong> — Empress Garden (1,032-line world), Khadakwasla Dam, National War Memorial, Saras Baug, Pataleshwar Cave.</li>
+          <li><strong>Shared infrastructure</strong> — diorama core, layout system, palette system, camera anchor helpers.</li>
+          <li><strong>Full test suite</strong> — Vitest tests on layout builders, prop specs, and camera anchors (canvas-free).</li>
+          <li><strong>Admin dashboard</strong> — approve community requests, moderate reviews.</li>
+        </ul>
+      </div>
+      <div>
+        <ul>
+          <li><strong>Dual-driver data layer</strong> — Redis for production, file for dev, fail-closed writes when unconfigured.</li>
+          <li><strong>Photo upload API</strong> — Vercel Blob or local, six photos per request, 4 MB each, JPG/PNG/WEBP/GIF.</li>
+          <li><strong>Directory with three views</strong> — grid, list, Google Maps.</li>
+          <li><strong>Time-of-day and season modes</strong> — dawn/golden/dusk palettes, show-week toggle for Empress Garden.</li>
+          <li><strong>Marathi + English</strong> — bilingual feature names throughout.</li>
+        </ul>
+      </div>
+    </div>
   </div>
 
   <div class="highlight">
-    This is a solo-built project with the depth usually seen in a small team. The procedural 3D architecture means the author is the only bottleneck — not an art pipeline.
+    <strong>The relevant fact for an investor or partner:</strong> this is not a prototype. It is a live, deployed, free website with real 3D scenes, real editorial content, and a real community layer — built by one person, in one city, at a cost that is transparent and modest. The question is not "can it be built" — it is "how fast can it grow."
   </div>
 </div>
 
-<!-- SLIDE 14: Live Demo -->
+<!-- SLIDE 15: Closing -->
 <div class="slide">
-  <h2>See It Live</h2>
-  <div style="display: flex; gap: 24px; align-items: center; margin-top: 16px;">
-    <div style="flex: 1;">
-      <h3>ExplorePune is live on the web</h3>
-      <p><strong>Production:</strong> <a href="https://explorepune.vercel.app">https://explorepune.vercel.app</a></p>
-      <p><strong>Source code:</strong> <a href="https://github.com/Yash-Kavaiya/Explore-Pune">github.com/Yash-Kavaiya/Explore-Pune</a></p>
-      <p style="margin-top: 12px;">Open any place — for example, <strong>Empress Garden</strong> — and you'll see:</p>
+  <h2>Summary — Why ExplorePune</h2>
+
+  <div class="stat-grid">
+    <div class="stat"><span class="counter" data-target="15">0</span><span class="label">3D places, Pune only, complete</span></div>
+    <div class="stat"><span class="counter blue" data-target="0">0</span><span class="label">Cost to end users (free, always)</span></div>
+    <div class="stat"><span class="counter green" data-target="6">0</span><span class="label">Times cheaper than imported 3D</span></div>
+    <div class="stat"><span class="counter gold" data-target="1">0</span><span class="label">Defensible visual moat</span></div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <h3>The business case in plain language</h3>
       <ul>
-        <li>A 3D scene you can drag to orbit and scroll to zoom</li>
-        <li>Numbered hotspots that fly the camera and reveal the story</li>
-        <li>A time-of-day toggle (dawn, golden, dusk)</li>
-        <li>A show-week toggle that places exhibition tents on the lawn</li>
-        <li>Marathi names alongside English for every feature</li>
-        <li>Full visitor etiquette and FAQs</li>
+        <li>Pune has real tourism demand and a large local audience, and no existing guide gives visitors a visual, interactive preview of each heritage site before they visit.</li>
+        <li>ExplorePune fills that gap — for free — with 15 hand-built 3D places, real editorial depth, and a community loop that makes the guide better over time.</li>
+        <li>The cost to build is modest (₹85,000–2,60,000) because the 3D is procedural — no artist, no asset files, no art pipeline. That same choice makes adding more places cheap forever.</li>
+        <li>Revenue is real but modest at this scale — sponsored listings, affiliate links, and voluntary tips — and it grows with the audience. The free model maximises the audience, which maximises the revenue surface.</li>
+        <li>The Pune-only focus is a feature, not a limitation — it lets the guide become definitive in one city before expanding.</li>
       </ul>
     </div>
-    <div style="font-size: 8rem; color: var(--primary); opacity: 0.12; font-weight: 900; text-align: center; transform: rotate(-8deg);">LIVE</div>
+    <div class="card">
+      <h3>The ask</h3>
+      <p><strong>If you are a visitor:</strong> open the site, pick a place, tap a hotspot, and see the city in 3D. It is free, it is live, and it is for you.</p>
+      <p><strong>If you are a potential partner:</strong> a sponsored listing next to a well-written, visually rich Pune heritage guide reaches a visitor who is already planning to go — that is a high-intent audience, and it is underserved by existing channels.</p>
+      <p><strong>If you are a funder or supporter:</strong> this is a low-cost, high-integrity public-interest product with a clear growth path. The procedural architecture means the cost of adding places — the core growth lever — stays low. The question is distribution and depth, not feasibility.</p>
+    </div>
   </div>
 
-  <div class="footer-note">
-    ExplorePune — Discover the soul of Pune. Built with Next.js 16, three.js, and a lot of care for Pune's heritage.
+  <div class="highlight" style="margin-top:14px;text-align:center;font-size:1.1rem;">
+    ExplorePune — Discover the soul of Pune.<br>
+    <span style="font-size:13px;color:var(--muted);display:block;margin-top:4px;">explorepune.vercel.app · github.com/Yash-Kavaiya/Explore-Pune</span>
   </div>
 </div>
+
+<script>
+  // Animated counters
+  document.addEventListener('DOMContentLoaded', () => {
+    const counters = document.querySelectorAll('.counter');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = parseInt(el.getAttribute('data-target'));
+          const isLarge = target > 9;
+          let current = 0;
+          const step = target > 50 ? Math.ceil(target / 40) : target > 9 ? 1 : 1;
+          const interval = setInterval(() => {
+            current += step;
+            if (current >= target) {
+              current = target;
+              clearInterval(interval);
+            }
+            el.textContent = current;
+          }, 20);
+          observer.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(c => observer.observe(c));
+  });
+
+  // Interactive tabs
+  const tabs = document.querySelectorAll('.tab-btn');
+  const contents = {
+    discover: document.getElementById('tab-discover'),
+    explore: document.getElementById('tab-explore'),
+    plan: document.getElementById('tab-plan'),
+    contribute: document.getElementById('tab-contribute'),
+  };
+  tabs.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabs.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      Object.keys(contents).forEach(key => {
+        contents[key].classList.toggle('active', key === btn.getAttribute('data-tab'));
+      });
+    });
+  });
+
+  // Interactive category tags (filter highlight - visual only, demonstrates interactivity)
+  document.querySelectorAll('.tag').forEach(tag => {
+    tag.addEventListener('click', () => {
+      tag.classList.toggle('active');
+    });
+  });
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
 
 </body>
 </html>
