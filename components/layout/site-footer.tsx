@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { MountainSnow } from "lucide-react";
 import { FOOTER_NAV, SITE } from "@/lib/site";
+import { UpiSupport } from "@/components/layout/upi-support";
 
 export function SiteFooter() {
   const year = 2026; // Static build; bump as needed.
@@ -38,13 +39,17 @@ export function SiteFooter() {
         ))}
       </div>
 
+      <div className="mx-auto max-w-6xl px-4 pb-10 sm:px-6">
+        <UpiSupport />
+      </div>
+
       <div className="border-t border-border/70">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-muted-foreground sm:flex-row sm:px-6">
           <p>
             © {year} {SITE.name}. A community-powered guide to Pune.
           </p>
           <p>
-            Info is for guidance — always verify the latest timings &amp; fees before you visit.
+            Support: {SITE.upiId} · always verify timings &amp; fees before you visit.
           </p>
         </div>
       </div>

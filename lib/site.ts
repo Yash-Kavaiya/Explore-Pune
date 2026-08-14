@@ -29,6 +29,9 @@ export const SITE = {
   locale: "en_IN",
   /** Pune city center — used as the default map focus. */
   center: { lat: 18.5204, lng: 73.8567 },
+  /** UPI handle for tips / AI-credit sponsorship. */
+  upiId: "explorepune@ybl",
+  upiName: "ExplorePune",
 } as const;
 
 export const MAIN_NAV = [
