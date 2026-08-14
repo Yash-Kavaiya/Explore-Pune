@@ -25,6 +25,19 @@ export type Database = {
 
 const EMPTY: Database = { requests: [], reviews: [], views: {} };
 
+/** Thrown on Vercel when Redis credentials are missing and a write is attempted. */
+export class DatabaseNotConfiguredError extends Error {
+  readonly code = "DATABASE_NOT_CONFIGURED" as const;
+
+  constructor() {
+    super(
+      "No database configured. Connect a Redis store to this Vercel project " +
+        "and expose KV_REST_API_URL and KV_REST_API_TOKEN — see DEPLOYMENT.md.",
+    );
+    this.name = "DatabaseNotConfiguredError";
+  }
+}
+
 /** Fill in any missing top-level keys so callers always get a whole Database. */
 function hydrate(parsed: Partial<Database> | null | undefined): Database {
   if (!parsed) return structuredClone(EMPTY);
@@ -108,10 +121,7 @@ function unconfiguredDriver(): Driver {
       return structuredClone(EMPTY);
     },
     async write() {
-      throw new Error(
-        "No database configured. Connect a Redis store to this Vercel project " +
-          "and expose KV_REST_API_URL and KV_REST_API_TOKEN — see DEPLOYMENT.md.",
-      );
+      throw new DatabaseNotConfiguredError();
     },
   };
 }
@@ -132,6 +142,11 @@ function activeDriver(): Driver {
 /** True when writes will actually persist, for callers that want to degrade. */
 export function isPersistent(): boolean {
   return redisCredentials() !== null || !process.env.VERCEL;
+}
+
+/** Drop the cached driver so tests can flip VERCEL / Redis env mid-file. */
+export function resetStoreDriverForTests(): void {
+  driver = undefined;
 }
 
 let writeQueue: Promise<unknown> = Promise.resolve();

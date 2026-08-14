@@ -1,4 +1,4 @@
-import { mutate, readDb } from "@/lib/store/db";
+import { isPersistent, mutate, readDb } from "@/lib/store/db";
 
 export type AdminStats = {
   requests: { total: number; pending: number; approved: number; rejected: number };
@@ -8,6 +8,12 @@ export type AdminStats = {
 };
 
 export async function incrementView(slug: string): Promise<number> {
+  // Place pages fire this on every first visit. Without Redis that used to
+  // 500 in production logs; skip the write and keep the page healthy.
+  if (!isPersistent()) {
+    const db = await readDb();
+    return db.views[slug] ?? 0;
+  }
   return mutate((db) => {
     db.views[slug] = (db.views[slug] ?? 0) + 1;
     return db.views[slug];

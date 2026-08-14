@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { isAdmin } from "@/lib/admin-auth";
+import { jsonFromStoreError } from "@/lib/store/http";
 import { createRequest, listRequests } from "@/lib/store/requests.repo";
 import { placeRequestInputSchema, type RequestStatus } from "@/lib/types";
 
@@ -26,6 +27,12 @@ export async function POST(request: Request) {
       { status: 400 },
     );
   }
-  const created = await createRequest(parsed.data);
-  return NextResponse.json({ request: created }, { status: 201 });
+  try {
+    const created = await createRequest(parsed.data);
+    return NextResponse.json({ request: created }, { status: 201 });
+  } catch (err) {
+    const res = jsonFromStoreError(err);
+    if (res) return res;
+    throw err;
+  }
 }
