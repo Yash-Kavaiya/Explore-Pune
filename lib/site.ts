@@ -32,6 +32,8 @@ export const SITE = {
   /** UPI handle for tips / AI-credit sponsorship. */
   upiId: "explorepune@ybl",
   upiName: "ExplorePune",
+  /** Microsoft Clarity project id. */
+  clarityId: "y24qaod8hh",
 } as const;
 
 export const MAIN_NAV = [
